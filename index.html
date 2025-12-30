@@ -1,12 +1,18 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Random</title>
+<title>algo random</title>
 
 <style>
+:root {
+  --bg: #0b0b0d;
+  --card: rgba(255,255,255,0.06);
+  --text: #f5f5f5;
+  --muted: rgba(255,255,255,0.6);
+  --accent: #ff3b3b;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -14,43 +20,96 @@
 body {
   margin: 0;
   height: 100vh;
-  background: #0a0a0a;
+  background: radial-gradient(circle at top, #15151a, var(--bg));
   display: flex;
   justify-content: center;
   align-items: center;
-  font-family: system-ui, sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--text);
   overflow: hidden;
-  color: white;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,59,59,0.08), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 40%);
+  animation: floatBg 14s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes floatBg {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
 }
 
 .container {
+  position: relative;
+  z-index: 1;
+  background: var(--card);
+  backdrop-filter: blur(14px);
+  border-radius: 22px;
+  padding: 48px 44px;
+  max-width: 720px;
+  width: 90%;
   text-align: center;
-  max-width: 700px;
-  padding: 40px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.55);
+  animation: appear 1s ease forwards;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
 }
 
 #text {
-  font-size: 2.4rem;
-  margin-bottom: 40px;
+  margin: 40px 0;
+  font-size: 2.6rem;
+  font-weight: 600;
   min-height: 120px;
   transition: all .6s ease;
 }
 
 button {
-  padding: 18px 36px;
-  font-size: 1rem;
-  border-radius: 30px;
+  padding: 18px 42px;
+  border-radius: 40px;
   border: none;
-  background: white;
-  color: black;
+  font-size: 1rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: transform .2s ease, opacity .2s ease;
+  background: var(--text);
+  color: #000;
+  transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
 }
 
 button:hover {
   transform: scale(1.05);
+  box-shadow: 0 10px 30px rgba(255,255,255,0.25);
 }
 
+footer {
+  margin-top: 36px;
+  font-size: .75rem;
+  color: var(--muted);
+}
+
+/* EFECTOS */
 .glitch {
   animation: glitch .4s infinite;
 }
@@ -79,85 +138,104 @@ button:hover {
 }
 
 .rotate {
-  transform: rotate(3deg);
+  transform: rotate(2deg);
 }
 </style>
 </head>
 
 <body>
 
+<div class="background"></div>
+
 <div class="container">
+  <h1>random</h1>
   <div id="text">pulsa el botón</div>
   <button onclick="doRandom()">hacer algo</button>
+  <footer>esto no sirve para nada</footer>
 </div>
 
 <script>
 const text = document.getElementById("text");
 
-/* 500 FRASES RANDOM */
-const phrases = [
-  "esto no sirve",
-  "otra vez aquí",
-  "no era este",
-  "vale",
-  "ok",
-  "sigue",
-  "¿por qué?",
-  "esto tampoco",
-  "meh",
-  "nada pasa",
-  "algo pasó",
-  "no mires atrás",
-  "sigue pulsando",
-  "no hay final",
-  "casi",
-  "ya basta",
-  "otra más",
-  "¿te aburres?",
-  "esto es random",
-  "no importa",
+const start = [
+  "esto",
+  "quizá",
+  "a veces",
+  "nadie",
+  "algo",
+  "nada",
+  "tal vez",
+  "seguramente",
+  "probablemente",
+  "definitivamente",
+  "aquí",
+  "otra vez"
 ];
 
-// duplicamos hasta ~500 sin relleno falso
-while (phrases.length < 500) {
-  phrases.push(
-    phrases[Math.floor(Math.random() * phrases.length)] +
-    Math.floor(Math.random() * 999)
-  );
-}
+const middle = [
+  "no significa",
+  "no importa",
+  "no tiene",
+  "carece de",
+  "rompe",
+  "ignora",
+  "evita",
+  "contradice",
+  "confirma",
+  "destruye",
+  "simula",
+  "finge"
+];
+
+const end = [
+  "nada",
+  "sentido",
+  "razón",
+  "un propósito",
+  "lo esperado",
+  "la lógica",
+  "todo",
+  "esto",
+  "lo que buscas",
+  "el final",
+  "algo real",
+  "una respuesta"
+];
 
 const backgrounds = [
-  "#0a0a0a",
-  "radial-gradient(circle at top, #1f1f1f, #000)",
-  "linear-gradient(135deg, #111, #222)",
-  "linear-gradient(135deg, #220000, #000)",
+  "radial-gradient(circle at top, #15151a, #0b0b0d)",
+  "linear-gradient(135deg, #140000, #000)",
+  "linear-gradient(135deg, #0e0e12, #000)",
   "radial-gradient(circle, #111, #000)",
+  "linear-gradient(135deg, #1a1a1a, #000)"
 ];
 
 const effects = ["", "glitch", "shake", "rotate"];
 
-function doRandom() {
-  // frase
-  text.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+function randomPhrase() {
+  return (
+    start[Math.floor(Math.random() * start.length)] + " " +
+    middle[Math.floor(Math.random() * middle.length)] + " " +
+    end[Math.floor(Math.random() * end.length)]
+  );
+}
 
-  // fondo
+function doRandom() {
+  text.textContent = randomPhrase();
+
   document.body.style.background =
     backgrounds[Math.floor(Math.random() * backgrounds.length)];
 
-  // limpiar efectos
   text.className = "";
 
-  // efecto random
   const effect = effects[Math.floor(Math.random() * effects.length)];
   if (effect) text.classList.add(effect);
 
-  // evento raro
   if (Math.random() < 0.05) {
     text.textContent = "no.";
     document.body.style.background = "#000";
   }
 
-  // fade ocasional
   if (Math.random() < 0.1) {
     text.classList.add("fade");
     setTimeout(() => text.classList.remove("fade"), 400);
@@ -167,4 +245,3 @@ function doRandom() {
 
 </body>
 </html>
-
