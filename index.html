@@ -2,10 +2,17 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Generador Inútil</title>
+  <title>Algo No Debería Existir</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
+    :root {
+      --bg-dark: #020617;
+      --bg-mid: #0f172a;
+      --accent: #ef4444;
+      --glass: rgba(255,255,255,0.08);
+    }
+
     * {
       box-sizing: border-box;
       margin: 0;
@@ -14,8 +21,11 @@
 
     body {
       min-height: 100vh;
-      font-family: 'Segoe UI', system-ui, sans-serif;
-      background: radial-gradient(circle at top, #0f172a, #020617);
+      font-family: system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(239,68,68,0.15), transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 40%),
+        linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
       color: white;
       display: flex;
       justify-content: center;
@@ -23,58 +33,55 @@
       overflow: hidden;
     }
 
-    .noise {
+    body::after {
+      content: "";
       position: fixed;
       inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
+      background-size: 60px 60px;
+      opacity: 0.15;
       pointer-events: none;
     }
 
-    .card {
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(12px);
-      border-radius: 24px;
-      padding: 40px;
-      max-width: 520px;
-      width: 90%;
+    .container {
+      width: 92%;
+      max-width: 640px;
+      padding: 50px 40px;
+      border-radius: 28px;
+      background: var(--glass);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 40px 100px rgba(0,0,0,0.7);
       text-align: center;
-      box-shadow: 0 0 60px rgba(0,0,0,0.6);
-      animation: fadeIn 1.2s ease;
+      animation: appear 1s ease;
     }
 
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     h1 {
-      font-size: 2.4rem;
+      font-size: 2.8rem;
+      letter-spacing: 2px;
       margin-bottom: 10px;
+      text-shadow: 0 0 20px rgba(239,68,68,0.5);
     }
 
     .subtitle {
-      font-size: 0.95rem;
       opacity: 0.7;
       margin-bottom: 30px;
     }
 
-    .output {
-      min-height: 90px;
+    .screen {
+      min-height: 120px;
+      padding: 25px;
+      border-radius: 20px;
+      background: rgba(0,0,0,0.45);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 1.3rem;
-      padding: 20px;
-      border-radius: 16px;
-      background: rgba(0,0,0,0.35);
-      margin-bottom: 30px;
-      transition: all 0.3s ease;
+      box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
     }
 
     .glitch {
@@ -83,32 +90,37 @@
 
     @keyframes glitch {
       0% { transform: translate(0); }
-      20% { transform: translate(-2px, 2px); }
-      40% { transform: translate(2px, -2px); }
-      60% { transform: translate(-1px, 1px); }
-      80% { transform: translate(1px, -1px); }
+      20% { transform: translate(-3px, 2px); }
+      40% { transform: translate(3px, -2px); }
+      60% { transform: translate(-2px, 1px); }
+      80% { transform: translate(2px, -1px); }
       100% { transform: translate(0); }
     }
 
+    .actions {
+      margin-top: 35px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
     button {
-      background: linear-gradient(135deg, #ef4444, #b91c1c);
       border: none;
-      color: white;
-      font-size: 1rem;
-      padding: 14px 26px;
+      padding: 14px 28px;
       border-radius: 999px;
+      font-size: 0.95rem;
       cursor: pointer;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-      box-shadow: 0 10px 30px rgba(239,68,68,0.4);
+      background: linear-gradient(135deg, #ef4444, #991b1b);
+      color: white;
+      box-shadow: 0 15px 40px rgba(239,68,68,0.45);
     }
 
     button:hover {
       transform: scale(1.05);
-      box-shadow: 0 14px 40px rgba(239,68,68,0.6);
     }
 
     footer {
-      margin-top: 25px;
+      margin-top: 30px;
       font-size: 0.7rem;
       opacity: 0.4;
     }
@@ -116,50 +128,222 @@
 </head>
 
 <body>
-  <div class="noise"></div>
+  <div class="container">
+    <h1>NO DEBERÍA</h1>
+    <div class="subtitle">pero aquí estamos</div>
 
-  <div class="card">
-    <h1>Generador Inútil</h1>
-    <div class="subtitle">No sirve para nada. Exactamente.</div>
-
-    <div class="output" id="output">
-      Pulsa el botón y acepta tu destino
+    <div class="screen" id="screen">
+      Pulsa el botón. Nada saldrá mal.
     </div>
 
-    <button onclick="generate()">Generar algo</button>
+    <div class="actions">
+      <button onclick="generate()">GENERAR</button>
+    </div>
 
-    <footer>
-      Esto no tiene propósito alguno
-    </footer>
+    <footer>No hay respuestas aquí</footer>
   </div>
 
   <script>
-    const frases = [
-      "Hoy no es martes, pero actúa como si lo fuera",
-      "Este texto fue generado sin supervisión adulta",
-      "No deberías estar leyendo esto",
-      "Algo importante iba aquí, pero se perdió",
-      "Respira. Sigue. No preguntes.",
-      "Esto no es un mensaje oculto (o sí)",
-      "Haz como que entiendes",
-      "Error 404: sentido no encontrado",
-      "Vuelve mañana. O no.",
-      "Este botón te juzga en silencio",
-      "Nada ha cambiado, pero algo se siente distinto",
-      "La página te está mirando",
+    const textos = [
+      // 1–50
+      "Esto no es un mensaje",
+      "Ya estuviste aquí antes",
+      "Nada ha cambiado",
+      "No sigas leyendo",
+      "Esto era opcional",
+      "Te estás quedando",
+      "No mires atrás",
+      "Demasiado tarde",
+      "No hay final",
+      "Esto no ayuda",
+      "Otra vez tú",
+      "No deberías pulsar",
+      "¿Esperabas algo?",
+      "Nada te observa",
+      "Esto no importa",
+      "El botón gana",
+      "Sigue intentando",
+      "No es profundo",
+      "O quizá sí",
+      "No hay patrón",
+      "El error eres tú",
+      "Aquí no hay pistas",
+      "La curiosidad duele",
       "Buen intento",
-      "Sigue pulsando, seguro que pasa algo"
+      "Otra vez",
+      "No pares",
+      "Nada ocurre",
+      "No lo repitas",
+      "Esto no es arte",
+      "Casi",
+      "No hoy",
+      "Esto es inútil",
+      "Te estás aburriendo",
+      "¿Por qué sigues?",
+      "No hay logro",
+      "Esto no guarda nada",
+      "Otra frase",
+      "Nada especial",
+      "Te vi llegar",
+      "No mires el código",
+      "Esto no se arregla",
+      "Cierra la pestaña",
+      "No pulses más",
+      "No hay Easter Egg",
+      "Mentira",
+      "Siempre hay uno",
+      "No aquí",
+      "Quizá sí",
+      "Sigue",
+      "Ya sabes cómo acaba",
+
+      // 51–150
+      "El tiempo pasa",
+      "Nada mejora",
+      "Nada empeora",
+      "Esto es neutro",
+      "No hay contexto",
+      "No hay lore",
+      "Esto no es un ARG",
+      "O sí",
+      "No preguntes",
+      "No respondas",
+      "Esto no se guarda",
+      "Esto no aprende",
+      "Esto no recuerda",
+      "Pero tú sí",
+      "No mires la hora",
+      "No es tarde",
+      "Nunca lo es",
+      "Nada empieza aquí",
+      "Nada termina aquí",
+      "Pulsa otra vez",
+      "Eso fue rápido",
+      "Otra frase más",
+      "Esto es finito",
+      "Pero largo",
+      "No te rindas",
+      "O sí",
+      "Esto no se rompe",
+      "Aún",
+      "Todavía",
+      "No hay versión final",
+      "Esto es temporal",
+      "Como todo",
+      "No es importante",
+      "Pero estás aquí",
+      "Eso cuenta",
+      "No mires atrás",
+      "Ya lo hiciste",
+      "No hay recompensa",
+      "Ni castigo",
+      "Solo texto",
+      "Mucho texto",
+      "Demasiado",
+      "Otra línea",
+      "Otra más",
+      "Sigue",
+      "No pares",
+      "Esto no termina",
+      "Solo se repite",
+      "Como tú",
+      "No hay salida",
+      "Cerrar es una opción",
+      "No la tomaste",
+      "Aquí sigues",
+      "Otra frase",
+      "No es especial",
+      "Pero es esta",
+      "Ahora",
+      "En este momento",
+      "No mañana",
+      "Ahora",
+      "Exactamente ahora",
+      "Lee despacio",
+      "No tan despacio",
+      "Demasiado tarde",
+      "Otra vez",
+      "Siempre otra vez",
+      "Nada cambia",
+      "Pero algo se siente",
+      "O no",
+      "Eso depende",
+      "De ti",
+      "No del botón",
+      "El botón es inocente",
+      "Tú no",
+      "Esto no juzga",
+      "Pero observa",
+      "No responde",
+      "No pregunta",
+      "Solo muestra",
+      "Texto",
+      "Más texto",
+
+      // 151–250
+      "Esto ya pasó",
+      "Esto pasará",
+      "Esto está pasando",
+      "No te aceleres",
+      "No te pares",
+      "No es serio",
+      "No es broma",
+      "No es nada",
+      "Esto no tiene sentido",
+      "Exacto",
+      "Ahora lo entiendes",
+      "O no",
+      "Da igual",
+      "Nada importa aquí",
+      "Pero algo importa fuera",
+      "Sal",
+      "O quédate",
+      "Da igual",
+      "Esto no cambia",
+      "Otra frase más",
+      "Otra vez",
+      "Otra",
+      "Suficiente",
+      "No",
+      "Una más",
+      "Ahora sí",
+      "Vale no",
+      "Sigue",
+      "No te detengas",
+      "Esto no termina",
+      "Nunca",
+      "Ni hoy",
+      "Ni mañana",
+      "Ni aquí",
+      "Ni ahora",
+      "Pulsa",
+      "Pulsa otra vez",
+      "Eso",
+      "Así",
+      "Exacto",
+      "Perfecto",
+      "Ahora para",
+      "No",
+      "Otra",
+      "Última",
+      "Mentira",
+      "Siempre miente",
+      "El texto",
+      "El botón",
+      "Yo",
+      "Tú",
+      "Aquí seguimos"
     ];
 
     function generate() {
-      const output = document.getElementById("output");
-      const random = frases[Math.floor(Math.random() * frases.length)];
-
-      output.classList.remove("glitch");
-      void output.offsetWidth; // reset animación
-      output.textContent = random;
-      output.classList.add("glitch");
+      const screen = document.getElementById("screen");
+      const random = textos[Math.floor(Math.random() * textos.length)];
+      screen.classList.remove("glitch");
+      void screen.offsetWidth;
+      screen.textContent = random;
+      screen.classList.add("glitch");
     }
   </script>
 </body>
 </html>
+
