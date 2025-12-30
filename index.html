@@ -2,18 +2,9 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>Página Inútil™</title>
+<title>No Hagas Click</title>
 
 <style>
-:root {
-  --bg1: #ffe4e6;
-  --bg2: #e0f2fe;
-  --bg3: #ecfeff;
-  --card: #ffffff;
-  --text: #0f172a;
-  --accent: #fb7185;
-}
-
 * {
   box-sizing: border-box;
   margin: 0;
@@ -23,139 +14,158 @@
 body {
   min-height: 100vh;
   font-family: system-ui, sans-serif;
-  background: linear-gradient(120deg, var(--bg1), var(--bg2), var(--bg3));
-  background-size: 300% 300%;
-  animation: bgMove 12s ease infinite;
+  background: #0f172a;
+  color: #e5e7eb;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-@keyframes bgMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-.card {
-  background: var(--card);
-  padding: 40px;
-  border-radius: 24px;
-  box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+.container {
   text-align: center;
-  width: min(420px, 90%);
-  animation: pop .8s ease;
-}
-
-@keyframes pop {
-  from { transform: scale(.8); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
+  padding: 40px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  max-width: 480px;
+  width: 90%;
 }
 
 h1 {
-  font-size: 2.2rem;
-  margin-bottom: 12px;
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+  transition: transform .3s ease;
 }
 
 .subtitle {
-  color: #64748b;
   font-size: .95rem;
+  color: #94a3b8;
   margin-bottom: 30px;
 }
 
-.output {
-  font-size: 1.3rem;
-  margin: 24px 0;
+#message {
   min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  font-size: 1.2rem;
+  margin-bottom: 30px;
 }
 
 button {
   border: none;
-  padding: 14px 26px;
+  background: #22c55e;
+  color: #052e16;
+  padding: 14px 28px;
   border-radius: 999px;
   font-size: 1rem;
   cursor: pointer;
-  background: var(--accent);
-  color: white;
-  transition: transform .15s ease, box-shadow .15s ease;
+  transition: all .15s ease;
 }
 
 button:hover {
-  transform: translateY(-2px) scale(1.05);
-  box-shadow: 0 10px 20px rgba(0,0,0,.2);
+  transform: scale(1.1) rotate(-2deg);
 }
 
-.footer {
-  margin-top: 28px;
-  font-size: .7rem;
-  color: #94a3b8;
+button:active {
+  transform: scale(.95);
 }
 
-.shake {
-  animation: shake .4s;
+.glitch {
+  animation: glitch .3s;
 }
 
-@keyframes shake {
+@keyframes glitch {
   0% { transform: translate(0); }
-  25% { transform: translate(-6px); }
-  50% { transform: translate(6px); }
-  75% { transform: translate(-4px); }
+  25% { transform: translate(-4px, 2px); }
+  50% { transform: translate(4px, -2px); }
+  75% { transform: translate(-2px, -2px); }
   100% { transform: translate(0); }
+}
+
+.fade {
+  animation: fade .6s;
+}
+
+@keyframes fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  background: black;
+  color: white;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  letter-spacing: .3em;
+  z-index: 99;
 }
 </style>
 </head>
 
 <body>
 
-<div class="card" id="card">
-  <h1>🤡 Página Inútil</h1>
-  <div class="subtitle">No hace nada útil. Disfrútalo.</div>
+<div class="screen" id="screen">?</div>
 
-  <div class="output" id="output">
-    Pulsa el botón 👇
-  </div>
-
-  <button onclick="doSomething()">Haz algo</button>
-
-  <div class="footer">
-    versión 0.0 absolutamente nada
-  </div>
+<div class="container" id="box">
+  <h1 id="title">No hagas click</h1>
+  <div class="subtitle">Esto es solo una advertencia</div>
+  <div id="message">Todo está tranquilo.</div>
+  <button onclick="action()">Click</button>
 </div>
 
 <script>
-const output = document.getElementById("output");
-const card = document.getElementById("card");
+let clicks = 0;
 
-const things = [
-  "Has perdido 3 segundos de tu vida",
-  "Esto podría haber sido un juego",
-  "Nada ha cambiado",
-  "Buen click, campeón",
-  "La página está orgullosa de ti",
-  "Error 418: soy una tetera",
-  "Wow. Increíble. Otro click.",
-  "Este texto fue escrito con cariño",
-  "Sigue pulsando, no pasará nada",
-  "Tal vez el próximo click sí"
+const messages = [
+  "No deberías haber hecho eso",
+  "En serio, para",
+  "Esto se está poniendo raro",
+  "No recuerdo programar esto",
+  "Algo va mal",
+  "¿Cuántas veces llevas?",
+  "Ya basta",
+  "No hay premio",
+  "Solo silencio",
+  "…"
 ];
 
-function doSomething() {
-  output.textContent = random(things);
-  card.classList.add("shake");
-  setTimeout(() => card.classList.remove("shake"), 400);
+function action() {
+  clicks++;
+  box.classList.add("glitch");
+  setTimeout(() => box.classList.remove("glitch"), 300);
 
-  if (Math.random() < 0.1) {
-    output.textContent = "😳 ok eso no estaba planeado";
+  message.textContent =
+    messages[Math.min(clicks - 1, messages.length - 1)];
+
+  title.style.transform = `rotate(${Math.random()*6-3}deg)`;
+
+  if (clicks === 7) {
+    document.body.style.background = "#020617";
   }
-}
 
-function random(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
+  if (clicks === 10) {
+    screen.style.display = "flex";
+    screen.textContent = "¿POR QUÉ?";
+    setTimeout(() => screen.style.display = "none", 1500);
+  }
+
+  if (clicks === 13) {
+    message.textContent = "";
+    title.textContent = "…";
+  }
+
+  if (clicks > 15 && Math.random() < 0.2) {
+    screen.style.display = "flex";
+    screen.textContent = "NO";
+    setTimeout(() => screen.style.display = "none", 500);
+  }
 }
 </script>
 
 </body>
 </html>
+
