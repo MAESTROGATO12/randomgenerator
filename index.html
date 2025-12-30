@@ -2,170 +2,165 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>No Hagas Click</title>
+<title>VHS</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*{box-sizing:border-box}
+html,body{
+  margin:0; height:100%;
+  background:#020617;
+  color:#e5e7eb;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  overflow:hidden;
 }
 
-body {
-  min-height: 100vh;
-  font-family: system-ui, sans-serif;
-  background: #0f172a;
-  color: #e5e7eb;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
+/* ===== VHS OVERLAYS ===== */
+#vhs-noise, #vhs-scanlines, #vhs-jitter {
+  position:fixed; inset:0; pointer-events:none; z-index:999;
 }
 
-.container {
-  text-align: center;
-  padding: 40px;
-  background: rgba(255,255,255,0.05);
-  border-radius: 20px;
-  backdrop-filter: blur(12px);
-  box-shadow: 0 0 40px rgba(0,0,0,0.6);
-  max-width: 480px;
-  width: 90%;
+#vhs-scanlines{
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0,0,0,.15) 0px,
+    rgba(0,0,0,.15) 1px,
+    transparent 2px,
+    transparent 4px
+  );
+  mix-blend-mode: overlay;
 }
 
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 16px;
-  transition: transform .3s ease;
+#vhs-noise{
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+  animation: noise 0.15s steps(2) infinite;
 }
 
-.subtitle {
-  font-size: .95rem;
-  color: #94a3b8;
-  margin-bottom: 30px;
+@keyframes noise { to { background-position: 120px 120px; } }
+
+#vhs-jitter{
+  animation: jitter 6s infinite;
 }
 
-#message {
-  min-height: 60px;
-  font-size: 1.2rem;
-  margin-bottom: 30px;
+@keyframes jitter{
+  0%,94%,100%{transform:translateX(0)}
+  95%{transform:translateX(-6px)}
+  96%{transform:translateX(8px)}
+  97%{transform:translateX(-4px)}
+  98%{transform:translateX(6px)}
 }
 
-button {
-  border: none;
-  background: #22c55e;
-  color: #052e16;
-  padding: 14px 28px;
-  border-radius: 999px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: all .15s ease;
+/* ===== CONTENT ===== */
+#wrap{
+  position:relative;
+  z-index:2;
+  height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
 
-button:hover {
-  transform: scale(1.1) rotate(-2deg);
+#container{
+  width:90%;
+  max-width:900px;
+  text-align:center;
 }
 
-button:active {
-  transform: scale(.95);
+#bigButton{
+  width:100%;
+  padding:50px 20px;
+  font-size:clamp(2rem,5vw,3.5rem);
+  font-weight:900;
+  border:none;
+  border-radius:28px;
+  cursor:pointer;
+  background:linear-gradient(135deg,#ef4444,#7f1d1d);
+  color:#020617;
+  box-shadow:0 25px 70px rgba(0,0,0,.7);
+  letter-spacing:2px;
+  text-shadow: 2px 0 #00f, -2px 0 #f00;
+  animation: chroma 3s infinite;
 }
 
-.glitch {
-  animation: glitch .3s;
+@keyframes chroma{
+  0%,100%{text-shadow:2px 0 #00f,-2px 0 #f00}
+  50%{text-shadow:1px 0 #00f,-3px 0 #f00}
 }
 
-@keyframes glitch {
-  0% { transform: translate(0); }
-  25% { transform: translate(-4px, 2px); }
-  50% { transform: translate(4px, -2px); }
-  75% { transform: translate(-2px, -2px); }
-  100% { transform: translate(0); }
+#textBox{
+  display:none;
+  margin-top:40px;
+  background:rgba(255,255,255,.05);
+  padding:30px;
+  border-radius:20px;
+  max-height:70vh;
+  overflow-y:auto;
+  line-height:1.7;
+  text-align:left;
+  animation: fadeIn .6s ease;
 }
 
-.fade {
-  animation: fade .6s;
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+#textBox h2{
+  text-align:center;
+  margin-top:0;
+  letter-spacing:1px;
 }
 
-@keyframes fade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+/* subtle flicker */
+.flicker{
+  animation: flicker 5s infinite;
 }
-
-.screen {
-  position: fixed;
-  inset: 0;
-  background: black;
-  color: white;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  font-size: 4rem;
-  letter-spacing: .3em;
-  z-index: 99;
+@keyframes flicker{
+  0%,100%{opacity:1}
+  98%{opacity:.85}
+  99%{opacity:.95}
 }
 </style>
 </head>
 
 <body>
+<div id="vhs-jitter"></div>
+<div id="vhs-scanlines"></div>
+<div id="vhs-noise"></div>
 
-<div class="screen" id="screen">?</div>
+<div id="wrap">
+  <div id="container" class="flicker">
+    <button id="bigButton" onclick="reveal()">HAZ CLICK</button>
 
-<div class="container" id="box">
-  <h1 id="title">No hagas click</h1>
-  <div class="subtitle">Esto es solo una advertencia</div>
-  <div id="message">Todo está tranquilo.</div>
-  <button onclick="action()">Click</button>
+    <div id="textBox">
+      <h2>Five Nights at Freddy's</h2>
+      <p>
+Para entender la historia de Five Nights at Freddy's hay que olvidarse que estos son juegos...
+      </p>
+      <p>
+¿Qué pasaría si dos amigos se abren una pizzería?...
+      </p>
+      <p>
+Henry y William Afton unieron sus capacidades...
+      </p>
+      <p>
+Circus Baby Pizza World marcaría el inicio del declive...
+      </p>
+      <p>
+“Vos estás roto. Yo te reconstruiré.”
+      </p>
+    </div>
+  </div>
 </div>
 
 <script>
-let clicks = 0;
-
-const messages = [
-  "No deberías haber hecho eso",
-  "En serio, para",
-  "Esto se está poniendo raro",
-  "No recuerdo programar esto",
-  "Algo va mal",
-  "¿Cuántas veces llevas?",
-  "Ya basta",
-  "No hay premio",
-  "Solo silencio",
-  "…"
-];
-
-function action() {
-  clicks++;
-  box.classList.add("glitch");
-  setTimeout(() => box.classList.remove("glitch"), 300);
-
-  message.textContent =
-    messages[Math.min(clicks - 1, messages.length - 1)];
-
-  title.style.transform = `rotate(${Math.random()*6-3}deg)`;
-
-  if (clicks === 7) {
-    document.body.style.background = "#020617";
-  }
-
-  if (clicks === 10) {
-    screen.style.display = "flex";
-    screen.textContent = "¿POR QUÉ?";
-    setTimeout(() => screen.style.display = "none", 1500);
-  }
-
-  if (clicks === 13) {
-    message.textContent = "";
-    title.textContent = "…";
-  }
-
-  if (clicks > 15 && Math.random() < 0.2) {
-    screen.style.display = "flex";
-    screen.textContent = "NO";
-    setTimeout(() => screen.style.display = "none", 500);
-  }
+function reveal(){
+  document.getElementById("bigButton").style.display="none";
+  document.getElementById("textBox").style.display="block";
 }
-</script>
 
+// micro distorsión vertical aleatoria
+setInterval(()=>{
+  document.body.style.filter =
+    Math.random() < .08 ? "contrast(1.1) saturate(1.1)" : "none";
+},120);
+</script>
 </body>
 </html>
 
