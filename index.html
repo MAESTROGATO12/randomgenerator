@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Generador Inútil</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      background: radial-gradient(circle at top, #0f172a, #020617);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 520px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 0 60px rgba(0,0,0,0.6);
+      animation: fadeIn 1.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+    }
+
+    .subtitle {
+      font-size: 0.95rem;
+      opacity: 0.7;
+      margin-bottom: 30px;
+    }
+
+    .output {
+      min-height: 90px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      padding: 20px;
+      border-radius: 16px;
+      background: rgba(0,0,0,0.35);
+      margin-bottom: 30px;
+      transition: all 0.3s ease;
+    }
+
+    .glitch {
+      animation: glitch 0.4s linear;
+    }
+
+    @keyframes glitch {
+      0% { transform: translate(0); }
+      20% { transform: translate(-2px, 2px); }
+      40% { transform: translate(2px, -2px); }
+      60% { transform: translate(-1px, 1px); }
+      80% { transform: translate(1px, -1px); }
+      100% { transform: translate(0); }
+    }
+
+    button {
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      border: none;
+      color: white;
+      font-size: 1rem;
+      padding: 14px 26px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      box-shadow: 0 10px 30px rgba(239,68,68,0.4);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 14px 40px rgba(239,68,68,0.6);
+    }
+
+    footer {
+      margin-top: 25px;
+      font-size: 0.7rem;
+      opacity: 0.4;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="noise"></div>
+
+  <div class="card">
+    <h1>Generador Inútil</h1>
+    <div class="subtitle">No sirve para nada. Exactamente.</div>
+
+    <div class="output" id="output">
+      Pulsa el botón y acepta tu destino
+    </div>
+
+    <button onclick="generate()">Generar algo</button>
+
+    <footer>
+      Esto no tiene propósito alguno
+    </footer>
+  </div>
+
+  <script>
+    const frases = [
+      "Hoy no es martes, pero actúa como si lo fuera",
+      "Este texto fue generado sin supervisión adulta",
+      "No deberías estar leyendo esto",
+      "Algo importante iba aquí, pero se perdió",
+      "Respira. Sigue. No preguntes.",
+      "Esto no es un mensaje oculto (o sí)",
+      "Haz como que entiendes",
+      "Error 404: sentido no encontrado",
+      "Vuelve mañana. O no.",
+      "Este botón te juzga en silencio",
+      "Nada ha cambiado, pero algo se siente distinto",
+      "La página te está mirando",
+      "Buen intento",
+      "Sigue pulsando, seguro que pasa algo"
+    ];
+
+    function generate() {
+      const output = document.getElementById("output");
+      const random = frases[Math.floor(Math.random() * frases.length)];
+
+      output.classList.remove("glitch");
+      void output.offsetWidth; // reset animación
+      output.textContent = random;
+      output.classList.add("glitch");
+    }
+  </script>
+</body>
+</html>
