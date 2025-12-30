@@ -1,349 +1,217 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Algo No Debería Existir</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>NO MIRES DEMASIADO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    :root {
-      --bg-dark: #020617;
-      --bg-mid: #0f172a;
-      --accent: #ef4444;
-      --glass: rgba(255,255,255,0.08);
-    }
+<style>
+:root{
+  --bg:#020617;
+  --bg2:#000000;
+  --red:#ef4444;
+  --red-dark:#7f1d1d;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-    body {
-      min-height: 100vh;
-      font-family: system-ui, sans-serif;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(239,68,68,0.15), transparent 40%),
-        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 40%),
-        linear-gradient(180deg, var(--bg-mid), var(--bg-dark));
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-    }
+html,body{
+  height:100%;
+}
 
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: radial-gradient(circle, rgba(255,255,255,0.05) 1px, transparent 1px);
-      background-size: 60px 60px;
-      opacity: 0.15;
-      pointer-events: none;
-    }
+body{
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(239,68,68,0.18), transparent 45%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.04), transparent 45%),
+    linear-gradient(180deg, var(--bg), var(--bg2));
+  color:var(--text);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
 
-    .container {
-      width: 92%;
-      max-width: 640px;
-      padding: 50px 40px;
-      border-radius: 28px;
-      background: var(--glass);
-      backdrop-filter: blur(14px);
-      box-shadow: 0 40px 100px rgba(0,0,0,0.7);
-      text-align: center;
-      animation: appear 1s ease;
-    }
+/* NOISE */
+body::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(255,255,255,0.03),
+      rgba(255,255,255,0.03) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+  opacity:0.25;
+  pointer-events:none;
+}
 
-    @keyframes appear {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
+/* CONTAINER */
+.app{
+  width:92%;
+  max-width:700px;
+  padding:60px 50px;
+  background:rgba(255,255,255,0.06);
+  backdrop-filter: blur(18px);
+  border-radius:32px;
+  box-shadow:
+    0 60px 140px rgba(0,0,0,0.85),
+    inset 0 0 0 1px rgba(255,255,255,0.05);
+  text-align:center;
+  animation:appear 1s ease;
+}
 
-    h1 {
-      font-size: 2.8rem;
-      letter-spacing: 2px;
-      margin-bottom: 10px;
-      text-shadow: 0 0 20px rgba(239,68,68,0.5);
-    }
+@keyframes appear{
+  from{opacity:0; transform:translateY(40px);}
+  to{opacity:1; transform:translateY(0);}
+}
 
-    .subtitle {
-      opacity: 0.7;
-      margin-bottom: 30px;
-    }
+/* TITLE */
+h1{
+  font-size:clamp(2.6rem,6vw,3.6rem);
+  letter-spacing:0.35em;
+  margin-bottom:12px;
+  text-shadow:0 0 25px rgba(239,68,68,0.6);
+}
 
-    .screen {
-      min-height: 120px;
-      padding: 25px;
-      border-radius: 20px;
-      background: rgba(0,0,0,0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.3rem;
-      box-shadow: inset 0 0 20px rgba(255,255,255,0.05);
-    }
+.subtitle{
+  font-size:0.85rem;
+  letter-spacing:3px;
+  color:var(--muted);
+  margin-bottom:40px;
+}
 
-    .glitch {
-      animation: glitch 0.4s linear;
-    }
+/* SCREEN */
+.screen{
+  min-height:140px;
+  padding:32px;
+  border-radius:22px;
+  background:rgba(0,0,0,0.55);
+  box-shadow:
+    inset 0 0 25px rgba(255,255,255,0.05),
+    0 0 40px rgba(239,68,68,0.15);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:1.35rem;
+  line-height:1.6;
+}
 
-    @keyframes glitch {
-      0% { transform: translate(0); }
-      20% { transform: translate(-3px, 2px); }
-      40% { transform: translate(3px, -2px); }
-      60% { transform: translate(-2px, 1px); }
-      80% { transform: translate(2px, -1px); }
-      100% { transform: translate(0); }
-    }
+/* GLITCH */
+.glitch{
+  animation:glitch 0.35s linear;
+}
 
-    .actions {
-      margin-top: 35px;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-    }
+@keyframes glitch{
+  0%{transform:translate(0);}
+  20%{transform:translate(-3px,2px);}
+  40%{transform:translate(3px,-2px);}
+  60%{transform:translate(-2px,1px);}
+  80%{transform:translate(2px,-1px);}
+  100%{transform:translate(0);}
+}
 
-    button {
-      border: none;
-      padding: 14px 28px;
-      border-radius: 999px;
-      font-size: 0.95rem;
-      cursor: pointer;
-      background: linear-gradient(135deg, #ef4444, #991b1b);
-      color: white;
-      box-shadow: 0 15px 40px rgba(239,68,68,0.45);
-    }
+/* ACTIONS */
+.actions{
+  margin-top:45px;
+  display:flex;
+  justify-content:center;
+}
 
-    button:hover {
-      transform: scale(1.05);
-    }
+/* BUTTON */
+button{
+  padding:16px 42px;
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  font-size:0.85rem;
+  letter-spacing:2px;
+  background:linear-gradient(135deg,var(--red),var(--red-dark));
+  color:white;
+  box-shadow:0 20px 60px rgba(239,68,68,0.55);
+  transition:transform .2s ease, box-shadow .2s ease;
+}
 
-    footer {
-      margin-top: 30px;
-      font-size: 0.7rem;
-      opacity: 0.4;
-    }
-  </style>
+button:hover{
+  transform:scale(1.08);
+  box-shadow:0 30px 90px rgba(239,68,68,0.75);
+}
+
+/* FOOTER */
+footer{
+  margin-top:35px;
+  font-size:0.7rem;
+  letter-spacing:2px;
+  opacity:0.4;
+}
+</style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>NO DEBERÍA</h1>
-    <div class="subtitle">pero aquí estamos</div>
 
-    <div class="screen" id="screen">
-      Pulsa el botón. Nada saldrá mal.
-    </div>
+<div class="app">
+  <h1>NO DEBERÍA</h1>
+  <div class="subtitle">seguir ocurriendo</div>
 
-    <div class="actions">
-      <button onclick="generate()">GENERAR</button>
-    </div>
-
-    <footer>No hay respuestas aquí</footer>
+  <div class="screen" id="screen">
+    Pulsa. Observa. Repite.
   </div>
 
-  <script>
-    const textos = [
-      // 1–50
-      "Esto no es un mensaje",
-      "Ya estuviste aquí antes",
-      "Nada ha cambiado",
-      "No sigas leyendo",
-      "Esto era opcional",
-      "Te estás quedando",
-      "No mires atrás",
-      "Demasiado tarde",
-      "No hay final",
-      "Esto no ayuda",
-      "Otra vez tú",
-      "No deberías pulsar",
-      "¿Esperabas algo?",
-      "Nada te observa",
-      "Esto no importa",
-      "El botón gana",
-      "Sigue intentando",
-      "No es profundo",
-      "O quizá sí",
-      "No hay patrón",
-      "El error eres tú",
-      "Aquí no hay pistas",
-      "La curiosidad duele",
-      "Buen intento",
-      "Otra vez",
-      "No pares",
-      "Nada ocurre",
-      "No lo repitas",
-      "Esto no es arte",
-      "Casi",
-      "No hoy",
-      "Esto es inútil",
-      "Te estás aburriendo",
-      "¿Por qué sigues?",
-      "No hay logro",
-      "Esto no guarda nada",
-      "Otra frase",
-      "Nada especial",
-      "Te vi llegar",
-      "No mires el código",
-      "Esto no se arregla",
-      "Cierra la pestaña",
-      "No pulses más",
-      "No hay Easter Egg",
-      "Mentira",
-      "Siempre hay uno",
-      "No aquí",
-      "Quizá sí",
-      "Sigue",
-      "Ya sabes cómo acaba",
+  <div class="actions">
+    <button onclick="generate()">GENERAR</button>
+  </div>
 
-      // 51–150
-      "El tiempo pasa",
-      "Nada mejora",
-      "Nada empeora",
-      "Esto es neutro",
-      "No hay contexto",
-      "No hay lore",
-      "Esto no es un ARG",
-      "O sí",
-      "No preguntes",
-      "No respondas",
-      "Esto no se guarda",
-      "Esto no aprende",
-      "Esto no recuerda",
-      "Pero tú sí",
-      "No mires la hora",
-      "No es tarde",
-      "Nunca lo es",
-      "Nada empieza aquí",
-      "Nada termina aquí",
-      "Pulsa otra vez",
-      "Eso fue rápido",
-      "Otra frase más",
-      "Esto es finito",
-      "Pero largo",
-      "No te rindas",
-      "O sí",
-      "Esto no se rompe",
-      "Aún",
-      "Todavía",
-      "No hay versión final",
-      "Esto es temporal",
-      "Como todo",
-      "No es importante",
-      "Pero estás aquí",
-      "Eso cuenta",
-      "No mires atrás",
-      "Ya lo hiciste",
-      "No hay recompensa",
-      "Ni castigo",
-      "Solo texto",
-      "Mucho texto",
-      "Demasiado",
-      "Otra línea",
-      "Otra más",
-      "Sigue",
-      "No pares",
-      "Esto no termina",
-      "Solo se repite",
-      "Como tú",
-      "No hay salida",
-      "Cerrar es una opción",
-      "No la tomaste",
-      "Aquí sigues",
-      "Otra frase",
-      "No es especial",
-      "Pero es esta",
-      "Ahora",
-      "En este momento",
-      "No mañana",
-      "Ahora",
-      "Exactamente ahora",
-      "Lee despacio",
-      "No tan despacio",
-      "Demasiado tarde",
-      "Otra vez",
-      "Siempre otra vez",
-      "Nada cambia",
-      "Pero algo se siente",
-      "O no",
-      "Eso depende",
-      "De ti",
-      "No del botón",
-      "El botón es inocente",
-      "Tú no",
-      "Esto no juzga",
-      "Pero observa",
-      "No responde",
-      "No pregunta",
-      "Solo muestra",
-      "Texto",
-      "Más texto",
+  <footer>esto no va a ninguna parte</footer>
+</div>
 
-      // 151–250
-      "Esto ya pasó",
-      "Esto pasará",
-      "Esto está pasando",
-      "No te aceleres",
-      "No te pares",
-      "No es serio",
-      "No es broma",
-      "No es nada",
-      "Esto no tiene sentido",
-      "Exacto",
-      "Ahora lo entiendes",
-      "O no",
-      "Da igual",
-      "Nada importa aquí",
-      "Pero algo importa fuera",
-      "Sal",
-      "O quédate",
-      "Da igual",
-      "Esto no cambia",
-      "Otra frase más",
-      "Otra vez",
-      "Otra",
-      "Suficiente",
-      "No",
-      "Una más",
-      "Ahora sí",
-      "Vale no",
-      "Sigue",
-      "No te detengas",
-      "Esto no termina",
-      "Nunca",
-      "Ni hoy",
-      "Ni mañana",
-      "Ni aquí",
-      "Ni ahora",
-      "Pulsa",
-      "Pulsa otra vez",
-      "Eso",
-      "Así",
-      "Exacto",
-      "Perfecto",
-      "Ahora para",
-      "No",
-      "Otra",
-      "Última",
-      "Mentira",
-      "Siempre miente",
-      "El texto",
-      "El botón",
-      "Yo",
-      "Tú",
-      "Aquí seguimos"
-    ];
+<script>
+const textos = [
+  "Esto no es un mensaje",
+  "Ya estuviste aquí antes",
+  "No sigas leyendo",
+  "Nada cambia",
+  "Otra vez tú",
+  "Demasiado tarde",
+  "Esto no ayuda",
+  "No hay respuestas",
+  "El botón no miente",
+  "Tú sí",
+  "No mires atrás",
+  "Aquí seguimos",
+  "No hay final",
+  "Esto no es un ARG",
+  "O sí",
+  "Sigue",
+  "No pares",
+  "Nada especial",
+  "Otra línea",
+  "Siempre otra",
+  "Esto no termina",
+  "Cierra la pestaña",
+  "No lo hagas",
+  "Lo hiciste",
+  "Nada ocurrió"
+];
 
-    function generate() {
-      const screen = document.getElementById("screen");
-      const random = textos[Math.floor(Math.random() * textos.length)];
-      screen.classList.remove("glitch");
-      void screen.offsetWidth;
-      screen.textContent = random;
-      screen.classList.add("glitch");
-    }
-  </script>
+function generate(){
+  const screen=document.getElementById("screen");
+  const text=textos[Math.floor(Math.random()*textos.length)];
+  screen.classList.remove("glitch");
+  void screen.offsetWidth;
+  screen.textContent=text;
+  screen.classList.add("glitch");
+}
+</script>
+
 </body>
 </html>
 
