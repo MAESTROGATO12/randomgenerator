@@ -3,28 +3,25 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Click Game</title>
+<title>Rebirth Clicker</title>
 
 <style>
 :root{
-  --bg:#f2f4ff;
-  --card:#ffffff;
-  --primary:#6366f1;
-  --accent:#ec4899;
-  --text:#111827;
-  --muted:#6b7280;
-  --success:#22c55e;
-  --shadow:0 25px 50px rgba(0,0,0,.15);
+  --bg:#f7f7fb;
+  --panel:#ffffff;
+  --text:#111;
+  --muted:#777;
+  --accent:#7c3aed;
+  --accent2:#22d3ee;
+  --border:rgba(0,0,0,.08);
 }
 
 body.dark{
-  --bg:#0b0f1a;
-  --card:#111827;
-  --primary:#818cf8;
-  --accent:#f472b6;
-  --text:#f9fafb;
+  --bg:#0a0a0f;
+  --panel:#12121a;
+  --text:#f1f1f1;
   --muted:#9ca3af;
-  --shadow:0 25px 60px rgba(0,0,0,.6);
+  --border:rgba(255,255,255,.08);
 }
 
 *{
@@ -35,263 +32,194 @@ body.dark{
 body{
   margin:0;
   min-height:100vh;
-  background:
-    radial-gradient(circle at top left,var(--primary),transparent 40%),
-    radial-gradient(circle at bottom right,var(--accent),transparent 40%),
-    var(--bg);
+  background:var(--bg);
   display:flex;
-  justify-content:center;
   align-items:center;
-  transition:.4s;
+  justify-content:center;
+  transition:.3s;
 }
 
-.app{
-  width:390px;
-  background:var(--card);
-  border-radius:30px;
-  padding:28px;
-  box-shadow:var(--shadow);
+.container{
+  width:420px;
+  background:var(--panel);
+  border-radius:24px;
+  padding:26px;
+  border:1px solid var(--border);
   color:var(--text);
-  transition:.4s;
 }
 
-.header{
+.top{
   display:flex;
   justify-content:space-between;
   align-items:center;
 }
 
-h1{
-  margin:0;
-  font-size:1.4rem;
+.title{
+  font-weight:700;
+  letter-spacing:.5px;
 }
 
-.theme-btn{
-  background:none;
+.toggle{
   border:none;
-  font-size:1.2rem;
+  background:none;
+  font-size:1.1rem;
   cursor:pointer;
   color:var(--text);
 }
 
-.score{
-  margin:24px 0 10px;
+.counter{
+  margin:30px 0 20px;
   text-align:center;
-  font-size:3.2rem;
-  font-weight:800;
-  color:var(--primary);
 }
 
-.main-btn{
+.value{
+  font-size:3.8rem;
+  font-weight:900;
+}
+
+.label{
+  font-size:.8rem;
+  color:var(--muted);
+  letter-spacing:2px;
+}
+
+.action{
   width:100%;
-  padding:18px;
+  padding:22px;
+  border-radius:18px;
   border:none;
-  border-radius:22px;
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  color:white;
   font-size:1.2rem;
+  font-weight:700;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:white;
   cursor:pointer;
-  box-shadow:0 12px 35px rgba(99,102,241,.45);
 }
 
-.main-btn:active{transform:scale(.95)}
+.action:active{
+  transform:scale(.97);
+}
 
-.rebirth-btn{
+.secondary{
   margin-top:12px;
   width:100%;
   padding:12px;
-  border:none;
-  border-radius:18px;
-  background:rgba(99,102,241,.15);
-  color:var(--primary);
+  border-radius:14px;
+  background:none;
+  border:1px dashed var(--border);
+  color:var(--text);
   cursor:pointer;
 }
 
-.stats{
+.info{
   display:flex;
   justify-content:space-between;
-  margin-top:14px;
-  font-size:.8rem;
-  color:var(--muted);
-}
-
-.tabs{
-  display:flex;
-  gap:10px;
-  margin-top:22px;
-}
-
-.tab{
-  flex:1;
-  padding:10px;
-  border-radius:16px;
-  border:none;
-  cursor:pointer;
-  background:rgba(99,102,241,.12);
-  color:var(--primary);
-  font-size:.8rem;
-}
-
-.tab.active{
-  background:linear-gradient(135deg,var(--primary),var(--accent));
-  color:white;
-}
-
-.section{
   margin-top:16px;
-  display:none;
-}
-
-.section.active{display:block}
-
-.achievement{
-  padding:12px;
-  border-radius:16px;
-  margin-bottom:10px;
-  background:rgba(99,102,241,.08);
   font-size:.8rem;
   color:var(--muted);
 }
 
-.achievement.unlocked{
-  background:rgba(34,197,94,.15);
-  color:var(--success);
-  font-weight:600;
+.divider{
+  height:1px;
+  background:var(--border);
+  margin:20px 0;
+}
+
+.section-title{
+  font-size:.8rem;
+  letter-spacing:2px;
+  color:var(--muted);
+  margin-bottom:10px;
+}
+
+.progress{
+  display:flex;
+  justify-content:space-between;
+  font-size:.8rem;
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
-  <div class="header">
-    <h1>Click Game</h1>
-    <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+<div class="container">
+  <div class="top">
+    <div class="title">REBIRTH CLICKER</div>
+    <button class="toggle" onclick="toggleTheme()">🌓</button>
   </div>
 
-  <div class="score" id="score">0</div>
+  <div class="counter">
+    <div class="value" id="score">0</div>
+    <div class="label">POWER</div>
+  </div>
 
-  <button class="main-btn" onclick="clickGame()">CLICK</button>
-  <button class="rebirth-btn" onclick="rebirth()">REBIRTH</button>
+  <button class="action" onclick="clickMain()">CLICK</button>
+  <button class="secondary" onclick="rebirth()">REBIRTH</button>
 
-  <div class="stats">
+  <div class="info">
     <span>Clicks: <b id="clicks">0</b></span>
     <span>Rebirths: <b id="rebirths">0</b></span>
   </div>
 
-  <div class="tabs">
-    <button class="tab active" onclick="showSection('game')">Juego</button>
-    <button class="tab" onclick="showSection('achievements')">Logros</button>
-  </div>
+  <div class="divider"></div>
 
-  <div id="game" class="section active"></div>
-  <div id="achievements" class="section"></div>
+  <div class="section-title">PROGRESO</div>
+  <div class="progress">
+    <span>Siguiente rebirth</span>
+    <span id="next">100</span>
+  </div>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("clickGame2")) || {
+let data = JSON.parse(localStorage.getItem("rebirth_new_ui")) || {
   score:0,
   clicks:0,
   rebirths:0,
-  achievements:[],
   theme:"light"
 };
 
 const scoreEl = document.getElementById("score");
 const clicksEl = document.getElementById("clicks");
 const rebirthsEl = document.getElementById("rebirths");
-const achContainer = document.getElementById("achievements");
-
-const achievements = [
-  {id:1,text:"Primer click",req:1},
-  {id:2,text:"10 clicks",req:10},
-  {id:3,text:"50 clicks",req:50},
-  {id:4,text:"100 clicks",req:100},
-  {id:5,text:"250 clicks",req:250},
-  {id:6,text:"500 clicks",req:500},
-  {id:7,text:"1000 clicks",req:1000},
-  {id:8,text:"Primer rebirth",rebirth:1},
-  {id:9,text:"5 rebirths",rebirth:5},
-  {id:10,text:"10 rebirths",rebirth:10},
-  {id:11,text:"Persistente",req:2000},
-  {id:12,text:"Click master",req:5000},
-  {id:13,text:"Click god",req:10000},
-  {id:14,text:"Reborn",rebirth:3},
-  {id:15,text:"Renacido",rebirth:7},
-  {id:16,text:"Eterno",rebirth:15},
-  {id:17,text:"No paras",req:300},
-  {id:18,text:"Adicto",req:750},
-  {id:19,text:"Leyenda",req:20000},
-  {id:20,text:"Nunca termina",rebirth:20}
-];
+const nextEl = document.getElementById("next");
 
 function save(){
-  localStorage.setItem("clickGame2",JSON.stringify(data));
+  localStorage.setItem("rebirth_new_ui",JSON.stringify(data));
 }
 
-function updateUI(){
+function update(){
   scoreEl.textContent = data.score;
   clicksEl.textContent = data.clicks;
   rebirthsEl.textContent = data.rebirths;
-  renderAchievements();
+  nextEl.textContent = Math.max(0,100 - data.clicks);
   document.body.classList.toggle("dark",data.theme==="dark");
 }
 
-function clickGame(){
+function clickMain(){
   data.clicks++;
   data.score += 1 + data.rebirths;
-  checkAchievements();
   save();
-  updateUI();
+  update();
 }
 
 function rebirth(){
-  if(data.clicks < 100) return alert("Necesitas 100 clicks");
+  if(data.clicks < 100){
+    alert("Necesitas 100 clicks");
+    return;
+  }
   data.clicks = 0;
   data.score = 0;
   data.rebirths++;
-  checkAchievements();
   save();
-  updateUI();
-}
-
-function checkAchievements(){
-  achievements.forEach(a=>{
-    if(data.achievements.includes(a.id)) return;
-    if(a.req && data.clicks >= a.req) data.achievements.push(a.id);
-    if(a.rebirth && data.rebirths >= a.rebirth) data.achievements.push(a.id);
-  });
-}
-
-function renderAchievements(){
-  achContainer.innerHTML="";
-  achievements.forEach(a=>{
-    const d=document.createElement("div");
-    d.className="achievement";
-    if(data.achievements.includes(a.id)){
-      d.classList.add("unlocked");
-      d.textContent="🏆 "+a.text;
-    }else{
-      d.textContent="🔒 "+a.text;
-    }
-    achContainer.appendChild(d);
-  });
-}
-
-function showSection(id){
-  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
-  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
-  document.querySelector(`button[onclick="showSection('${id}')"]`).classList.add("active");
+  update();
 }
 
 function toggleTheme(){
-  data.theme = data.theme==="light" ? "dark" : "light";
+  data.theme = data.theme === "light" ? "dark" : "light";
   save();
-  updateUI();
+  update();
 }
 
-updateUI();
+update();
 </script>
 
 </body>
