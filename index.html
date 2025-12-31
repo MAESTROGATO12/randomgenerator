@@ -6,32 +6,53 @@
 <title>Click Feliz</title>
 
 <style>
+:root {
+  --bg1: #1e3c72;
+  --bg2: #2a5298;
+  --accent: #ffffff;
+  --text: #ffffff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   height: 100vh;
+  background: linear-gradient(120deg, var(--bg1), var(--bg2));
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(120deg, #1e3c72, #2a5298);
-  font-family: Arial, sans-serif;
-  transition: background 0.6s;
+  font-family: "Segoe UI", Arial, sans-serif;
+  transition: background 0.8s ease;
+  overflow: hidden;
+}
+
+h1 {
+  color: var(--text);
+  font-weight: 300;
+  margin-bottom: 40px;
+  letter-spacing: 2px;
+  opacity: 0.85;
 }
 
 button {
-  padding: 40px 80px;
-  font-size: 2.5rem;
+  padding: 45px 90px;
+  font-size: 2.6rem;
   border: none;
-  border-radius: 20px;
+  border-radius: 25px;
   cursor: pointer;
-  background: white;
-  color: #333;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
+  background: var(--accent);
+  color: #222;
+  box-shadow: 0 25px 50px rgba(0,0,0,0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+  transform: scale(1.06);
+  box-shadow: 0 35px 70px rgba(0,0,0,0.45);
 }
 
 button:active {
@@ -39,36 +60,82 @@ button:active {
 }
 
 .counter {
-  position: fixed;
-  bottom: 20px;
-  font-size: 1.2rem;
-  color: white;
+  margin-top: 30px;
+  color: var(--text);
   opacity: 0.7;
+  font-size: 1.1rem;
+}
+
+.particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: float 1.5s ease-out forwards;
+}
+
+@keyframes float {
+  from {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-120px) scale(0);
+    opacity: 0;
+  }
+}
+
+.footer {
+  position: fixed;
+  bottom: 15px;
+  font-size: 0.9rem;
+  color: white;
+  opacity: 0.4;
 }
 </style>
 </head>
 
 <body>
 
+<h1>haz click y relájate</h1>
+
 <button id="btn">CLICK 😌</button>
-<div class="counter" id="count">Clicks: 0</div>
+
+<div class="counter" id="counter">Clicks: 0</div>
+<div class="footer">una página inútil pero bonita</div>
 
 <script>
 let clicks = 0;
 
 const btn = document.getElementById("btn");
-const count = document.getElementById("count");
+const counter = document.getElementById("counter");
 
-btn.addEventListener("click", () => {
+btn.addEventListener("click", (e) => {
   clicks++;
-  count.textContent = "Clicks: " + clicks;
+  counter.textContent = "Clicks: " + clicks;
 
+  // Cambiar fondo
   document.body.style.background =
     `linear-gradient(120deg,
-     hsl(${Math.random()*360},60%,40%),
-     hsl(${Math.random()*360},60%,30%))`;
+      hsl(${Math.random()*360}, 60%, 45%),
+      hsl(${Math.random()*360}, 60%, 30%))`;
 
-  btn.textContent = "CLICK ✨";
+  // Texto dinámico
+  const texts = ["CLICK ✨", "OTRA VEZ 😌", "SIGUE 🫶", "MÁS ✨", "OK 😎"];
+  btn.textContent = texts[Math.floor(Math.random() * texts.length)];
+
+  // Partículas
+  for (let i = 0; i < 8; i++) {
+    const p = document.createElement("div");
+    p.className = "particle";
+    p.style.left = e.clientX + (Math.random()*40 - 20) + "px";
+    p.style.top = e.clientY + (Math.random()*40 - 20) + "px";
+    p.style.background = `hsl(${Math.random()*360}, 80%, 60%)`;
+    document.body.appendChild(p);
+
+    setTimeout(() => p.remove(), 1500);
+  }
 });
 </script>
 
