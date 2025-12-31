@@ -7,9 +7,10 @@
 
 <style>
 :root {
-  --bg: #0f1220;
-  --panel: #1c2040;
+  --bg: #0b0e1a;
+  --panel: #151a33;
   --accent: #ff4d4d;
+  --good: #2ecc71;
   --text: #ffffff;
 }
 
@@ -21,7 +22,7 @@
 body {
   margin: 0;
   height: 100vh;
-  background: radial-gradient(circle at top, #1b1f4a, var(--bg));
+  background: radial-gradient(circle at top, #1c2150, var(--bg));
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,39 +31,41 @@ body {
 
 .game {
   background: var(--panel);
-  border-radius: 20px;
+  border-radius: 22px;
   padding: 40px;
-  width: 360px;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  width: 380px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
   text-align: center;
+  position: relative;
 }
 
 h1 {
   margin-top: 0;
   font-weight: 300;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
 }
 
 .score {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   margin: 20px 0;
 }
 
 button.main {
   width: 100%;
-  padding: 30px;
+  padding: 32px;
   font-size: 2rem;
   border: none;
-  border-radius: 18px;
+  border-radius: 20px;
   background: var(--accent);
   color: white;
   cursor: pointer;
   box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  transition: transform 0.1s ease;
+  transition: transform 0.1s ease, filter 0.2s;
 }
 
 button.main:active {
   transform: scale(0.94);
+  filter: brightness(1.2);
 }
 
 .shop {
@@ -82,16 +85,16 @@ button.main:active {
   align-items: center;
   background: rgba(255,255,255,0.05);
   padding: 12px;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-bottom: 10px;
 }
 
 .upgrade button {
   border: none;
   border-radius: 10px;
-  padding: 8px 12px;
+  padding: 8px 14px;
   cursor: pointer;
-  background: #2ecc71;
+  background: var(--good);
   color: black;
   font-weight: bold;
 }
@@ -102,11 +105,43 @@ button.main:active {
   cursor: not-allowed;
 }
 
-.footer {
-  margin-top: 15px;
-  font-size: 0.8rem;
+.achievements {
+  margin-top: 25px;
+  text-align: left;
+}
+
+.achievements h2 {
+  font-size: 1.1rem;
+  opacity: 0.8;
+}
+
+.achievement {
+  font-size: 0.9rem;
   opacity: 0.4;
-  text-align: center;
+  margin-top: 6px;
+}
+
+.achievement.unlocked {
+  opacity: 1;
+  color: var(--good);
+}
+
+.toast {
+  position: absolute;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: black;
+  padding: 12px 20px;
+  border-radius: 12px;
+  opacity: 0;
+  transition: all 0.4s ease;
+  font-size: 0.9rem;
+}
+
+.toast.show {
+  bottom: -10px;
+  opacity: 1;
 }
 </style>
 </head>
@@ -134,61 +169,108 @@ button.main:active {
     </div>
   </div>
 
-  <div class="footer">un juego inútil pero adictivo</div>
+  <div class="achievements">
+    <h2>Logros</h2>
+    <div id="ach1" class="achievement">👶 Primer click</div>
+    <div id="ach2" class="achievement">🔥 100 clicks</div>
+    <div id="ach3" class="achievement">🤖 Primer auto-clicker</div>
+    <div id="ach4" class="achievement">💀 ¿Sigues aquí?</div>
+  </div>
+
+  <div class="toast" id="toast">Logro desbloqueado</div>
 </div>
 
 <script>
-let clicks = 0;
-let perClick = 1;
-let autoClickers = 0;
-
-let costClick = 10;
-let costAuto = 50;
+let game = {
+  clicks: 0,
+  perClick: 1,
+  autoClickers: 0,
+  costClick: 10,
+  costAuto: 50,
+  achievements: {}
+};
 
 const scoreEl = document.getElementById("score");
-const clickBtn = document.getElementById("clickBtn");
-const upgradeClickBtn = document.getElementById("upgradeClick");
-const upgradeAutoBtn = document.getElementById("upgradeAuto");
+const toast = document.getElementById("toast");
+
+function saveGame() {
+  localStorage.setItem("clickInfinitoSave", JSON.stringify(game));
+}
+
+function loadGame() {
+  const save = localStorage.getItem("clickInfinitoSave");
+  if (save) game = JSON.parse(save);
+}
+
+function showToast(text) {
+  toast.textContent = text;
+  toast.classList.add("show");
+  setTimeout(() => toast.classList.remove("show"), 2500);
+}
+
+function unlock(id, text) {
+  if (!game.achievements[id]) {
+    game.achievements[id] = true;
+    document.getElementById(id).classList.add("unlocked");
+    showToast(text);
+    saveGame();
+  }
+}
 
 function updateUI() {
-  scoreEl.textContent = clicks + " clicks";
-  upgradeClickBtn.textContent = costClick;
-  upgradeAutoBtn.textContent = costAuto;
+  scoreEl.textContent = game.clicks + " clicks";
+  upgradeClick.textContent = game.costClick;
+  upgradeAuto.textContent = game.costAuto;
 
-  upgradeClickBtn.disabled = clicks < costClick;
-  upgradeAutoBtn.disabled = clicks < costAuto;
+  upgradeClick.disabled = game.clicks < game.costClick;
+  upgradeAuto.disabled = game.clicks < game.costAuto;
+
+  for (let id in game.achievements) {
+    document.getElementById(id).classList.add("unlocked");
+  }
 }
 
 clickBtn.onclick = () => {
-  clicks += perClick;
+  game.clicks += game.perClick;
+
+  if (game.clicks >= 1) unlock("ach1", "Primer click");
+  if (game.clicks >= 100) unlock("ach2", "100 clicks");
+  if (game.clicks >= 1000) unlock("ach4", "¿Sigues aquí?");
+
+  saveGame();
   updateUI();
 };
 
-upgradeClickBtn.onclick = () => {
-  if (clicks >= costClick) {
-    clicks -= costClick;
-    perClick++;
-    costClick = Math.floor(costClick * 1.8);
+upgradeClick.onclick = () => {
+  if (game.clicks >= game.costClick) {
+    game.clicks -= game.costClick;
+    game.perClick++;
+    game.costClick = Math.floor(game.costClick * 1.8);
+    saveGame();
     updateUI();
   }
 };
 
-upgradeAutoBtn.onclick = () => {
-  if (clicks >= costAuto) {
-    clicks -= costAuto;
-    autoClickers++;
-    costAuto = Math.floor(costAuto * 2);
+upgradeAuto.onclick = () => {
+  if (game.clicks >= game.costAuto) {
+    game.clicks -= game.costAuto;
+    game.autoClickers++;
+    game.costAuto = Math.floor(game.costAuto * 2);
+    unlock("ach3", "Primer auto-clicker");
+    saveGame();
     updateUI();
   }
 };
 
 setInterval(() => {
-  clicks += autoClickers;
+  game.clicks += game.autoClickers;
   updateUI();
 }, 1000);
 
+loadGame();
 updateUI();
 </script>
 
 </body>
 </html>
+
