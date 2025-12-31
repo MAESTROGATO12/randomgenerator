@@ -3,198 +3,300 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>casual clicker</title>
+<title>CLICK CORE</title>
 
 <style>
 :root{
-  --bg:#0a0a0a;
-  --card:#141414;
-  --accent:#ff3b3b;
-  --text:#f5f5f5;
+  --bg:#0a0a0f;
+  --panel:#12121a;
+  --accent:#7c3aed;
+  --accent2:#22d3ee;
+  --text:#e5e7eb;
   --muted:#9ca3af;
+  --radius:20px;
 }
+
+*{box-sizing:border-box;margin:0;padding:0}
+
 body{
-  margin:0;
-  font-family:system-ui;
-  background:linear-gradient(180deg,#000,#0a0a0a);
+  font-family:system-ui, sans-serif;
+  background:radial-gradient(circle at top, #1e1b4b, var(--bg));
   color:var(--text);
   min-height:100vh;
   display:flex;
   justify-content:center;
+  align-items:center;
 }
-.app{
+
+/* ================= GAME WRAPPER ================= */
+
+.game{
   width:100%;
   max-width:420px;
+  padding:24px;
+}
+
+/* ================= HEADER ================= */
+
+.header{
   display:flex;
-  flex-direction:column;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:24px;
 }
-header{
-  padding:20px;
+
+.header h1{
+  font-size:1.2rem;
+  letter-spacing:2px;
+}
+
+.header button{
+  background:transparent;
+  border:1px solid var(--accent);
+  color:var(--accent);
+  padding:6px 12px;
+  border-radius:999px;
+  cursor:pointer;
+}
+
+/* ================= MAIN COUNTER ================= */
+
+.counter-box{
+  background:linear-gradient(135deg, #1f2937, #0f172a);
+  border-radius:var(--radius);
+  padding:40px 20px;
   text-align:center;
-  font-weight:900;
-  font-size:1.6rem;
+  box-shadow:0 0 40px rgba(124,58,237,0.3);
 }
+
 .counter{
-  font-size:5rem;
-  font-weight:900;
-  text-align:center;
-  margin:20px 0;
+  font-size:3.5rem;
+  font-weight:800;
+  margin-bottom:12px;
 }
-.tap{
-  margin:0 20px;
-  height:90px;
-  border-radius:30px;
-  border:none;
-  background:var(--accent);
-  color:#fff;
+
+.sub{
+  color:var(--muted);
+  font-size:0.9rem;
+}
+
+/* ================= BUTTON ================= */
+
+.big-button{
+  margin-top:30px;
+  width:100%;
+  padding:22px;
   font-size:1.4rem;
-  font-weight:900;
-}
-.nav{
-  display:flex;
-  gap:12px;
-  padding:20px;
-}
-.nav button{
-  flex:1;
-  padding:14px;
-  border-radius:18px;
+  font-weight:700;
   border:none;
-  background:var(--card);
+  border-radius:var(--radius);
+  background:linear-gradient(135deg, var(--accent), var(--accent2));
+  color:#000;
+  cursor:pointer;
+  transition:transform .1s;
+}
+
+.big-button:active{
+  transform:scale(0.96);
+}
+
+/* ================= MENU BAR ================= */
+
+.menu{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-top:24px;
+}
+
+.menu button{
+  background:var(--panel);
+  border:1px solid #1f2937;
   color:var(--text);
-  font-size:1.1rem;
+  padding:12px;
+  border-radius:14px;
+  cursor:pointer;
 }
-.section{
-  padding:20px;
-}
-.panel{
-  background:var(--card);
-  border-radius:26px;
-  padding:20px;
-  margin-bottom:20px;
-}
-.panel h2{
-  margin:0 0 12px;
-}
-.list{
-  max-height:320px;
-  overflow-y:auto;
-}
-.item{
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.1);
-  font-size:.9rem;
-  opacity:.4;
-}
-.item.ok{opacity:1;color:#22c55e}
-.hidden{font-style:italic}
-.start{
+
+/* ================= MODALS ================= */
+
+.modal{
   position:fixed;
   inset:0;
-  background:#000;
-  display:flex;
+  background:rgba(0,0,0,0.7);
+  display:none;
   justify-content:center;
   align-items:center;
-  z-index:10;
+  z-index:50;
 }
-.start button{
-  font-size:2.2rem;
-  padding:28px 50px;
-  border-radius:40px;
+
+.modal-content{
+  background:var(--panel);
+  width:90%;
+  max-width:400px;
+  max-height:80vh;
+  overflow:auto;
+  padding:24px;
+  border-radius:var(--radius);
+}
+
+.modal h2{
+  margin-bottom:16px;
+  text-align:center;
+}
+
+.close{
+  margin-top:20px;
+  width:100%;
+  padding:12px;
   border:none;
+  border-radius:999px;
   background:var(--accent);
-  color:#fff;
-  font-weight:900;
+  color:#000;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ================= LISTS ================= */
+
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+
+.item{
+  background:#0f172a;
+  padding:12px;
+  border-radius:12px;
+  font-size:0.85rem;
 }
 </style>
 </head>
 
 <body>
 
-<div id="start" class="start">
-  <button onclick="start()">INICIAR</button>
+<div class="game">
+
+  <div class="header">
+    <h1>CLICK CORE</h1>
+    <button onclick="resetGame()">RESET</button>
+  </div>
+
+  <div class="counter-box">
+    <div class="counter" id="count">0</div>
+    <div class="sub">Clicks totales</div>
+  </div>
+
+  <button class="big-button" onclick="clickAction()">CLICK</button>
+
+  <div class="menu">
+    <button onclick="openModal('ranking')">Ranking</button>
+    <button onclick="openModal('achievements')">Logros</button>
+    <button onclick="openModal('shop')">Tienda</button>
+  </div>
+
 </div>
 
-<div class="app">
-  <header>CASUAL CLICK</header>
-
-  <div id="count" class="counter">0</div>
-  <button class="tap" onclick="tap()">CLICK</button>
-
-  <div class="nav">
-    <button onclick="show('shop')">🛒</button>
-    <button onclick="show('ach')">🏆</button>
-    <button onclick="reset()">♻</button>
+<!-- ================= RANKING ================= -->
+<div class="modal" id="ranking">
+  <div class="modal-content">
+    <h2>Clasificación</h2>
+    <div class="list" id="rankingList"></div>
+    <button class="close" onclick="closeModal('ranking')">Cerrar</button>
   </div>
+</div>
 
-  <div class="section" id="shop" style="display:none">
-    <div class="panel">
-      <h2>Tienda</h2>
-      <button onclick="buyTap()">+1 por click (50)</button><br><br>
-      <button onclick="buyAuto()">Auto +1/s (200)</button>
-    </div>
+<!-- ================= ACHIEVEMENTS ================= -->
+<div class="modal" id="achievements">
+  <div class="modal-content">
+    <h2>Logros</h2>
+    <div class="list" id="achievementsList"></div>
+    <button class="close" onclick="closeModal('achievements')">Cerrar</button>
   </div>
+</div>
 
-  <div class="section" id="ach" style="display:none">
-    <div class="panel">
-      <h2>Logros</h2>
-      <div id="achList" class="list"></div>
-    </div>
+<!-- ================= SHOP ================= -->
+<div class="modal" id="shop">
+  <div class="modal-content">
+    <h2>Tienda</h2>
+    <div class="item">🔒 Próximamente</div>
+    <button class="close" onclick="closeModal('shop')">Cerrar</button>
   </div>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("click_save")) || {
-  v:0,p:1,a:0,started:false
-};
+let clicks = Number(localStorage.getItem("clicks")) || 0;
+let achievements = JSON.parse(localStorage.getItem("achievements")) || [];
 
-const achs = [
-  ...Array.from({length:45},(_,i)=>({
-    t:`${i+1} clicks`,
-    c:()=>data.v>=i+1
-  })),
-  {t:"¿Por qué hiciste esto?",c:()=>data.v===666,h:true},
-  {t:"No pares",c:()=>data.v>=1000,h:true},
-  {t:"Insano",c:()=>data.v>=5000,h:true},
-  {t:"Esto escala",c:()=>data.p>=10,h:true},
-  {t:"Ya basta",c:()=>data.a>=10,h:true}
+const achievementData = [
+  {id:1, name:"Primer Toque", goal:1},
+  {id:2, name:"Cien Intentos", goal:100},
+  {id:3, name:"Mil Veces Tú", goal:1000},
+  {id:4, name:"Sin Vida Social", goal:5000},
+  {id:5, name:"¿Por Qué Sigues?", goal:10000}
 ];
 
-function start(){
-  data.started=true;
-  document.getElementById("start").style.display="none";
-  save();
-}
-if(data.started)document.getElementById("start").style.display="none";
+document.getElementById("count").textContent = clicks;
 
-function save(){localStorage.setItem("click_save",JSON.stringify(data))}
-function tap(){data.v+=data.p;update()}
-function buyTap(){if(data.v<50)return;data.v-=50;data.p++;update()}
-function buyAuto(){if(data.v<200)return;data.v-=200;data.a++;update()}
-function reset(){
-  if(!confirm("¿Seguro?"))return;
-  localStorage.removeItem("click_save");
-  location.reload();
+function clickAction(){
+  clicks++;
+  localStorage.setItem("clicks", clicks);
+  document.getElementById("count").textContent = clicks;
+  checkAchievements();
+  updateRanking();
 }
-function show(id){
-  document.getElementById("shop").style.display="none";
-  document.getElementById("ach").style.display="none";
-  document.getElementById(id).style.display="block";
-}
-function update(){
-  count.textContent=data.v;
-  achList.innerHTML="";
-  achs.forEach(a=>{
-    let d=document.createElement("div");
-    let ok=a.c();
-    d.className="item"+(ok?" ok":"")+(a.h?" hidden":"");
-    d.textContent=a.h&&!ok?"Logro oculto":a.t;
-    achList.appendChild(d);
+
+function checkAchievements(){
+  achievementData.forEach(a=>{
+    if(clicks >= a.goal && !achievements.includes(a.id)){
+      achievements.push(a.id);
+      localStorage.setItem("achievements", JSON.stringify(achievements));
+      alert("LOGRO DESBLOQUEADO: " + a.name);
+    }
   });
-  save();
 }
-setInterval(()=>{data.v+=data.a;update()},1000);
-update();
+
+function openModal(id){
+  document.getElementById(id).style.display="flex";
+  if(id==="achievements") loadAchievements();
+  if(id==="ranking") loadRanking();
+}
+
+function closeModal(id){
+  document.getElementById(id).style.display="none";
+}
+
+function loadAchievements(){
+  const box=document.getElementById("achievementsList");
+  box.innerHTML="";
+  achievementData.forEach(a=>{
+    box.innerHTML+=`
+      <div class="item">
+        ${achievements.includes(a.id)?"🏆":"🔒"} ${a.name}
+      </div>`;
+  });
+}
+
+function updateRanking(){
+  let best = Number(localStorage.getItem("best")) || 0;
+  if(clicks>best){
+    localStorage.setItem("best",clicks);
+  }
+}
+
+function loadRanking(){
+  const best=localStorage.getItem("best")||0;
+  document.getElementById("rankingList").innerHTML=
+    `<div class="item">🥇 Mejor partida: ${best} clicks</div>`;
+}
+
+function resetGame(){
+  if(confirm("¿Resetear todo?")){
+    localStorage.clear();
+    location.reload();
+  }
+}
 </script>
 
 </body>
