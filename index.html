@@ -2,165 +2,168 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<title>VHS</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Juego de Reflejos</title>
 
 <style>
-*{box-sizing:border-box}
-html,body{
-  margin:0; height:100%;
-  background:#020617;
-  color:#e5e7eb;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  overflow:hidden;
+:root {
+  --bg: #0f172a;
+  --panel: #020617;
+  --accent: #22c55e;
+  --danger: #ef4444;
+  --text: #e5e7eb;
 }
 
-/* ===== VHS OVERLAYS ===== */
-#vhs-noise, #vhs-scanlines, #vhs-jitter {
-  position:fixed; inset:0; pointer-events:none; z-index:999;
+* {
+  box-sizing: border-box;
+  font-family: system-ui, sans-serif;
 }
 
-#vhs-scanlines{
-  background: repeating-linear-gradient(
-    to bottom,
-    rgba(0,0,0,.15) 0px,
-    rgba(0,0,0,.15) 1px,
-    transparent 2px,
-    transparent 4px
-  );
-  mix-blend-mode: overlay;
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #1e293b, #020617);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--text);
 }
 
-#vhs-noise{
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
-  animation: noise 0.15s steps(2) infinite;
+.game {
+  width: 360px;
+  padding: 24px;
+  background: rgba(2,6,23,0.85);
+  border-radius: 18px;
+  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+  text-align: center;
 }
 
-@keyframes noise { to { background-position: 120px 120px; } }
-
-#vhs-jitter{
-  animation: jitter 6s infinite;
+h1 {
+  margin: 0 0 10px;
+  font-size: 1.8rem;
 }
 
-@keyframes jitter{
-  0%,94%,100%{transform:translateX(0)}
-  95%{transform:translateX(-6px)}
-  96%{transform:translateX(8px)}
-  97%{transform:translateX(-4px)}
-  98%{transform:translateX(6px)}
+.info {
+  display: flex;
+  justify-content: space-between;
+  margin: 14px 0 20px;
+  font-size: 0.9rem;
+  opacity: 0.9;
 }
 
-/* ===== CONTENT ===== */
-#wrap{
-  position:relative;
-  z-index:2;
-  height:100%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+.play-area {
+  position: relative;
+  height: 220px;
+  background: #020617;
+  border-radius: 14px;
+  overflow: hidden;
 }
 
-#container{
-  width:90%;
-  max-width:900px;
-  text-align:center;
+#target {
+  position: absolute;
+  padding: 14px 18px;
+  background: var(--accent);
+  color: #022c22;
+  font-weight: 700;
+  border-radius: 12px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.08s;
 }
 
-#bigButton{
-  width:100%;
-  padding:50px 20px;
-  font-size:clamp(2rem,5vw,3.5rem);
-  font-weight:900;
-  border:none;
-  border-radius:28px;
-  cursor:pointer;
-  background:linear-gradient(135deg,#ef4444,#7f1d1d);
-  color:#020617;
-  box-shadow:0 25px 70px rgba(0,0,0,.7);
-  letter-spacing:2px;
-  text-shadow: 2px 0 #00f, -2px 0 #f00;
-  animation: chroma 3s infinite;
+#target:active {
+  transform: scale(0.9);
 }
 
-@keyframes chroma{
-  0%,100%{text-shadow:2px 0 #00f,-2px 0 #f00}
-  50%{text-shadow:1px 0 #00f,-3px 0 #f00}
+button {
+  margin-top: 20px;
+  padding: 14px;
+  width: 100%;
+  background: var(--danger);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-#textBox{
-  display:none;
-  margin-top:40px;
-  background:rgba(255,255,255,.05);
-  padding:30px;
-  border-radius:20px;
-  max-height:70vh;
-  overflow-y:auto;
-  line-height:1.7;
-  text-align:left;
-  animation: fadeIn .6s ease;
+button:hover {
+  filter: brightness(1.1);
 }
 
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-
-#textBox h2{
-  text-align:center;
-  margin-top:0;
-  letter-spacing:1px;
-}
-
-/* subtle flicker */
-.flicker{
-  animation: flicker 5s infinite;
-}
-@keyframes flicker{
-  0%,100%{opacity:1}
-  98%{opacity:.85}
-  99%{opacity:.95}
+.hidden {
+  display: none;
 }
 </style>
 </head>
 
 <body>
-<div id="vhs-jitter"></div>
-<div id="vhs-scanlines"></div>
-<div id="vhs-noise"></div>
 
-<div id="wrap">
-  <div id="container" class="flicker">
-    <button id="bigButton" onclick="reveal()">HAZ CLICK</button>
+<div class="game">
+  <h1>🎯 Reflejos</h1>
 
-    <div id="textBox">
-      <h2>Five Nights at Freddy's</h2>
-      <p>
-Para entender la historia de Five Nights at Freddy's hay que olvidarse que estos son juegos...
-      </p>
-      <p>
-¿Qué pasaría si dos amigos se abren una pizzería?...
-      </p>
-      <p>
-Henry y William Afton unieron sus capacidades...
-      </p>
-      <p>
-Circus Baby Pizza World marcaría el inicio del declive...
-      </p>
-      <p>
-“Vos estás roto. Yo te reconstruiré.”
-      </p>
-    </div>
+  <div class="info">
+    <div>Puntos: <span id="score">0</span></div>
+    <div>Tiempo: <span id="time">15</span>s</div>
   </div>
+
+  <div class="play-area" id="area">
+    <div id="target" class="hidden">CLICK</div>
+  </div>
+
+  <button id="start">Empezar</button>
 </div>
 
 <script>
-function reveal(){
-  document.getElementById("bigButton").style.display="none";
-  document.getElementById("textBox").style.display="block";
+const target = document.getElementById("target");
+const area = document.getElementById("area");
+const startBtn = document.getElementById("start");
+const scoreEl = document.getElementById("score");
+const timeEl = document.getElementById("time");
+
+let score = 0;
+let time = 15;
+let timer = null;
+
+function randomPosition() {
+  const maxX = area.clientWidth - target.offsetWidth;
+  const maxY = area.clientHeight - target.offsetHeight;
+
+  target.style.left = Math.random() * maxX + "px";
+  target.style.top = Math.random() * maxY + "px";
 }
 
-// micro distorsión vertical aleatoria
-setInterval(()=>{
-  document.body.style.filter =
-    Math.random() < .08 ? "contrast(1.1) saturate(1.1)" : "none";
-},120);
+target.addEventListener("click", () => {
+  score++;
+  scoreEl.textContent = score;
+  randomPosition();
+});
+
+startBtn.addEventListener("click", () => {
+  score = 0;
+  time = 15;
+  scoreEl.textContent = score;
+  timeEl.textContent = time;
+
+  startBtn.disabled = true;
+  target.classList.remove("hidden");
+  randomPosition();
+
+  timer = setInterval(() => {
+    time--;
+    timeEl.textContent = time;
+
+    if (time <= 0) {
+      clearInterval(timer);
+      target.classList.add("hidden");
+      startBtn.disabled = false;
+      alert("⏱ Tiempo terminado\nPuntuación: " + score);
+    }
+  }, 1000);
+});
 </script>
+
 </body>
 </html>
 
