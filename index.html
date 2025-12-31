@@ -2,212 +2,248 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>REBIRTH CLICKER</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>casual clicker</title>
 
 <style>
-:root {
-  --bg:#0f172a;--panel:#111827;--text:#e5e7eb;--muted:#9ca3af;
-  --accent:#22d3ee;--good:#22c55e
+:root{
+  --bg:#05070d;
+  --panel:#0b1020;
+  --text:#e5e7eb;
+  --muted:#9ca3af;
+  --accent:#ef4444;
+  --accent-soft:#fb7185;
+  --good:#22c55e;
 }
 body.light{
-  --bg:#f8fafc;--panel:#fff;--text:#0f172a;--muted:#475569;
-  --accent:#2563eb;--good:#16a34a
+  --bg:#f9fafb;
+  --panel:#ffffff;
+  --text:#020617;
+  --muted:#475569;
+  --accent:#dc2626;
+  --accent-soft:#f87171;
 }
-*{box-sizing:border-box;margin:0}
+*{margin:0;padding:0;box-sizing:border-box}
 body{
-  font-family:system-ui;
-  background:var(--bg);
+  background:radial-gradient(circle at top,var(--panel),var(--bg));
   color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont;
   min-height:100vh;
   display:flex;
   align-items:center;
-  justify-content:center
+  justify-content:center;
+  overscroll-behavior:none;
 }
 
-/* ===== PANTALLA START ===== */
-.start{
-  position:fixed;inset:0;
-  background:linear-gradient(160deg,var(--bg),#020617);
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  z-index:20
+/* ===== LAYOUT ===== */
+.app{
+  width:100%;
+  max-width:430px;
+  padding:18px;
 }
-.start h1{font-size:3rem;margin-bottom:10px}
-.start p{color:var(--muted);margin-bottom:30px}
-.start button{
-  padding:18px 40px;
-  font-size:1.2rem;
-  border:none;border-radius:20px;
-  background:var(--accent);
-  cursor:pointer
+.card{
+  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--panel);
+  border-radius:28px;
+  padding:26px 22px 30px;
+  box-shadow:0 40px 90px rgba(0,0,0,.6);
+  text-align:center;
 }
 
-/* ===== JUEGO ===== */
-.app{width:100%;max-width:520px;padding:24px;text-align:center}
-.panel{
-  background:var(--panel);
-  border-radius:24px;
-  padding:36px 26px;
-  box-shadow:0 25px 70px rgba(0,0,0,.35)
-}
+/* ===== COUNTER ===== */
 .counter{
-  font-size:clamp(3.5rem,8vw,5rem);
-  font-weight:900;margin-bottom:8px
+  font-size:clamp(3.5rem,10vw,5.5rem);
+  font-weight:900;
+  letter-spacing:-.04em;
+  margin-bottom:6px;
+  transition:.15s ease;
 }
-.hint{font-size:.85rem;color:var(--muted);margin-bottom:26px}
-
-.main-btn{
-  width:100%;padding:20px;
-  font-size:1.25rem;font-weight:800;
-  border:none;border-radius:18px;
-  background:linear-gradient(135deg,var(--accent),#38bdf8);
-  cursor:pointer;margin-bottom:22px
-}
-.main-btn:active{transform:scale(.97)}
-
-.actions{display:flex;gap:10px}
-.action-btn{
-  flex:1;padding:12px;border-radius:14px;
-  background:transparent;color:var(--text);
-  border:1px solid rgba(255,255,255,.1);
-  cursor:pointer
+.counter.bump{transform:scale(1.05)}
+.sub{
+  font-size:.85rem;
+  color:var(--muted);
+  margin-bottom:26px;
 }
 
-.footer{margin-top:14px;font-size:.65rem;color:var(--muted)}
+/* ===== MAIN BUTTON ===== */
+.tap{
+  width:100%;
+  height:90px;
+  border-radius:24px;
+  border:none;
+  font-size:1.3rem;
+  font-weight:900;
+  background:linear-gradient(135deg,var(--accent),var(--accent-soft));
+  color:#fff;
+  cursor:pointer;
+  box-shadow:0 15px 40px rgba(239,68,68,.45);
+  transition:.1s ease;
+}
+.tap:active{transform:scale(.96)}
 
-/* ===== MODALES ===== */
+/* ===== MENU ===== */
+.menu{
+  display:flex;
+  gap:12px;
+  margin-top:18px;
+}
+.menu button{
+  flex:1;
+  padding:14px 0;
+  border-radius:16px;
+  border:none;
+  background:rgba(255,255,255,.05);
+  color:var(--text);
+  font-size:1.1rem;
+  cursor:pointer;
+}
+
+/* ===== MODALS ===== */
 .modal{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.65);
-  display:none;align-items:center;justify-content:center;
-  z-index:10
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.7);
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  z-index:20;
 }
 .modal.active{display:flex}
-.modal-box{
+.sheet{
+  width:100%;
+  max-width:430px;
   background:var(--panel);
-  width:90%;max-width:420px;
-  border-radius:22px;
-  padding:26px;text-align:left
+  border-radius:26px 26px 0 0;
+  padding:24px;
+  animation:slide .25s ease;
 }
-.modal h2{margin-bottom:16px}
-
-/* ===== TIENDA ===== */
-.shop-item{
-  display:flex;justify-content:space-between;
-  margin-bottom:14px
+@keyframes slide{
+  from{transform:translateY(30px);opacity:0}
 }
-.shop-item button{
-  padding:6px 14px;border-radius:10px;
-  border:none;background:var(--accent);
-  cursor:pointer
+.sheet h2{
+  font-size:1.4rem;
+  margin-bottom:18px;
 }
 
-/* ===== LOGROS ===== */
-.achievement{
-  font-size:.85rem;padding:8px 0;
+/* ===== SHOP ===== */
+.item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:14px;
+}
+.item button{
+  padding:8px 18px;
+  border-radius:14px;
+  border:none;
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+}
+
+/* ===== ACHIEVEMENTS ===== */
+.ach{
+  font-size:.85rem;
+  padding:10px 0;
   border-bottom:1px solid rgba(255,255,255,.08);
-  opacity:.3
+  opacity:.35;
 }
-.achievement.unlocked{
-  opacity:1;color:var(--good)
+.ach.ok{opacity:1;color:var(--good)}
+
+/* ===== FOOT ===== */
+.foot{
+  margin-top:14px;
+  font-size:.65rem;
+  color:var(--muted);
+  text-align:center;
 }
 </style>
 </head>
 
 <body>
 
-<!-- START -->
-<div class="start" id="start">
-  <h1>REBIRTH CLICKER</h1>
-  <p>Idle · Rebirth · Progreso infinito</p>
-  <button onclick="startGame()">JUGAR</button>
-</div>
-
-<!-- JUEGO -->
 <div class="app">
-  <div class="panel">
-    <div class="counter" id="counter">0</div>
-    <div class="hint" id="hint"></div>
-    <button class="main-btn" onclick="clickMain()">PULSAR</button>
-    <div class="actions">
-      <button class="action-btn" onclick="openModal('shop')">🛒</button>
-      <button class="action-btn" onclick="openModal('ach')">🏆</button>
-      <button class="action-btn" onclick="toggleTheme()">🌙</button>
+  <div class="card">
+    <div id="count" class="counter">0</div>
+    <div id="info" class="sub"></div>
+    <button class="tap" onclick="tap()">TAP</button>
+    <div class="menu">
+      <button onclick="openM('shop')">🛒</button>
+      <button onclick="openM('ach')">🏆</button>
+      <button onclick="theme()">🌗</button>
     </div>
   </div>
-  <div class="footer">v1.0 · guardado automático</div>
+  <div class="foot">REBIRTH · autosave</div>
 </div>
 
-<!-- TIENDA -->
-<div class="modal" id="shop">
-  <div class="modal-box">
+<!-- SHOP -->
+<div id="shop" class="modal">
+  <div class="sheet">
     <h2>Tienda</h2>
-    <div class="shop-item"><span>+1 por click</span><button onclick="buyPower()">50</button></div>
-    <div class="shop-item"><span>Auto +1/s</span><button onclick="buyAuto()">200</button></div>
-    <button class="action-btn" onclick="closeModal()">Cerrar</button>
+    <div class="item"><span>+1 tap</span><button onclick="buyP()">50</button></div>
+    <div class="item"><span>Auto +1/s</span><button onclick="buyA()">250</button></div>
+    <button class="menu" onclick="closeM()">Cerrar</button>
   </div>
 </div>
 
-<!-- LOGROS -->
-<div class="modal" id="ach">
-  <div class="modal-box">
+<!-- ACH -->
+<div id="ach" class="modal">
+  <div class="sheet">
     <h2>Logros</h2>
-    <div id="a1" class="achievement">Primer click</div>
-    <div id="a2" class="achievement">100 puntos</div>
-    <div id="a3" class="achievement">Primer rebirth</div>
-    <div id="a4" class="achievement">Auto activo</div>
-    <button class="action-btn" onclick="closeModal()">Cerrar</button>
+    <div id="a1" class="ach">Primer tap</div>
+    <div id="a2" class="ach">100 puntos</div>
+    <div id="a3" class="ach">Primer rebirth</div>
+    <div id="a4" class="ach">Automático</div>
+    <button class="menu" onclick="closeM()">Cerrar</button>
   </div>
 </div>
 
 <script>
-let game = JSON.parse(localStorage.getItem("rc_save")) || {
-  value:0,power:1,auto:0,rebirths:0,theme:"dark",started:false,last:Date.now()
+let g = JSON.parse(localStorage.getItem("rb_save")) || {
+  v:0,p:1,a:0,r:0,t:"dark",last:Date.now()
 };
-if(game.theme==="light")document.body.classList.add("light");
-if(game.started)document.getElementById("start").style.display="none";
+if(g.t==="light")document.body.classList.add("light");
 
-function startGame(){
-  game.started=true;
-  document.getElementById("start").style.display="none";
+function save(){g.last=Date.now();localStorage.setItem("rb_save",JSON.stringify(g))}
+
+function upd(){
+  count.textContent=Math.floor(g.v);
+  info.textContent=`+${g.p}/tap · +${g.a}/s · rebirth ${g.r}`;
+  unlock(a1,g.v>0);
+  unlock(a2,g.v>=100);
+  unlock(a3,g.r>0);
+  unlock(a4,g.a>0);
   save()
 }
+function unlock(el,c){if(c)el.classList.add("ok")}
 
-function update(){
-  counter.textContent=Math.floor(game.value);
-  hint.textContent=`+${game.power}/click · +${game.auto}/s · rebirths ${game.rebirths}`;
-  unlock("a1",game.value>0);
-  unlock("a2",game.value>=100);
-  unlock("a3",game.rebirths>0);
-  unlock("a4",game.auto>0);
-  save()
-}
-function unlock(id,c){if(c)document.getElementById(id).classList.add("unlocked")}
-
-function clickMain(){
-  game.value+=game.power;
-  if(game.value>=1000){
-    game.value=0;game.rebirths++;game.power++
+function tap(){
+  g.v+=g.p;
+  count.classList.add("bump");
+  setTimeout(()=>count.classList.remove("bump"),120);
+  if(g.v>=1000){
+    g.v=0;g.r++;g.p++
   }
-  update()
+  upd()
 }
-function buyPower(){if(game.value<50)return;game.value-=50;game.power++;update()}
-function buyAuto(){if(game.value<200)return;game.value-=200;game.auto++;update()}
+function buyP(){if(g.v<50)return;g.v-=50;g.p++;upd()}
+function buyA(){if(g.v<250)return;g.v-=250;g.a++;upd()}
 
-function tick(s){game.value+=game.auto*s}
-let diff=Math.floor((Date.now()-game.last)/1000);if(diff>0)tick(diff);
-setInterval(()=>{tick(1);update()},1000);
+function openM(id){document.getElementById(id).classList.add("active")}
+function closeM(){document.querySelectorAll(".modal").forEach(m=>m.classList.remove("active"))}
 
-function openModal(id){document.getElementById(id).classList.add("active")}
-function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.classList.remove("active"))}
-function toggleTheme(){
+function theme(){
   document.body.classList.toggle("light");
-  game.theme=document.body.classList.contains("light")?"light":"dark";save()
+  g.t=document.body.classList.contains("light")?"light":"dark";
+  save()
 }
-function save(){game.last=Date.now();localStorage.setItem("rc_save",JSON.stringify(game))}
-update()
+
+let diff=Math.floor((Date.now()-g.last)/1000);
+if(diff>0)g.v+=g.a*diff;
+setInterval(()=>{g.v+=g.a;upd()},1000);
+
+upd()
 </script>
+
 </body>
 </html>
 
