@@ -3,220 +3,269 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rebirth Clicker</title>
+<title>Casual Clicker</title>
 
 <style>
 :root{
-  --bg:#f7f7fb;
-  --panel:#ffffff;
-  --text:#111;
-  --muted:#777;
-  --accent:#7c3aed;
-  --accent2:#22d3ee;
-  --border:rgba(0,0,0,.08);
-}
-
-body.dark{
-  --bg:#0a0a0f;
-  --panel:#12121a;
-  --text:#f1f1f1;
+  --bg1:#0f1020;
+  --bg2:#1b1d3a;
+  --card:#16182f;
+  --accent:#ff4d6d;
+  --accent2:#fbbf24;
+  --text:#f8fafc;
   --muted:#9ca3af;
-  --border:rgba(255,255,255,.08);
 }
 
 *{
   box-sizing:border-box;
-  font-family:system-ui,Segoe UI,sans-serif;
+  font-family:Inter,system-ui,Segoe UI,sans-serif;
 }
 
 body{
   margin:0;
   min-height:100vh;
-  background:var(--bg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:.3s;
-}
-
-.container{
-  width:420px;
-  background:var(--panel);
-  border-radius:24px;
-  padding:26px;
-  border:1px solid var(--border);
+  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
   color:var(--text);
+  display:flex;
+  justify-content:center;
+  align-items:center;
 }
 
-.top{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
+.app{
+  width:100%;
+  max-width:1100px;
+  padding:30px;
+  display:grid;
+  grid-template-columns: 1fr 360px;
+  gap:30px;
+}
+
+.panel{
+  background:var(--card);
+  border-radius:28px;
+  padding:30px;
+  box-shadow:0 40px 80px rgba(0,0,0,.4);
 }
 
 .title{
-  font-weight:700;
-  letter-spacing:.5px;
+  font-size:1.4rem;
+  font-weight:800;
+  letter-spacing:1px;
 }
 
-.toggle{
-  border:none;
-  background:none;
-  font-size:1.1rem;
-  cursor:pointer;
-  color:var(--text);
-}
+/* -------- MAIN GAME -------- */
 
-.counter{
-  margin:30px 0 20px;
-  text-align:center;
-}
-
-.value{
-  font-size:3.8rem;
+.score{
+  font-size:4.2rem;
   font-weight:900;
+  margin:30px 0 10px;
 }
 
-.label{
-  font-size:.8rem;
+.subtitle{
   color:var(--muted);
-  letter-spacing:2px;
+  font-size:.8rem;
+  letter-spacing:3px;
 }
 
-.action{
+.big-button{
   width:100%;
-  padding:22px;
-  border-radius:18px;
+  margin-top:30px;
+  padding:28px;
+  border-radius:22px;
   border:none;
-  font-size:1.2rem;
-  font-weight:700;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  font-size:1.5rem;
+  font-weight:900;
+  background:linear-gradient(135deg,var(--accent),#ff758f);
   color:white;
   cursor:pointer;
 }
 
-.action:active{
-  transform:scale(.97);
+.big-button:active{
+  transform:scale(.96);
 }
 
-.secondary{
-  margin-top:12px;
-  width:100%;
-  padding:12px;
+.stats{
+  display:flex;
+  justify-content:space-between;
+  margin-top:20px;
+  font-size:.9rem;
+  color:var(--muted);
+}
+
+.rebirth{
+  margin-top:20px;
+  padding:14px;
   border-radius:14px;
   background:none;
-  border:1px dashed var(--border);
-  color:var(--text);
+  border:1px solid var(--accent);
+  color:var(--accent);
   cursor:pointer;
 }
 
-.info{
+/* -------- SHOP -------- */
+
+.shop-item{
+  background:#0f1128;
+  padding:16px;
+  border-radius:16px;
+  margin-bottom:14px;
   display:flex;
   justify-content:space-between;
-  margin-top:16px;
-  font-size:.8rem;
-  color:var(--muted);
+  align-items:center;
 }
 
-.divider{
-  height:1px;
-  background:var(--border);
-  margin:20px 0;
+.shop-item button{
+  padding:8px 14px;
+  border:none;
+  border-radius:10px;
+  background:var(--accent2);
+  color:black;
+  font-weight:700;
+  cursor:pointer;
 }
 
-.section-title{
-  font-size:.8rem;
-  letter-spacing:2px;
-  color:var(--muted);
+/* -------- ACHIEVEMENTS -------- */
+
+.achievements{
+  grid-column:1 / -1;
+}
+
+.achievement{
+  background:#0f1128;
+  padding:14px;
+  border-radius:14px;
   margin-bottom:10px;
+  opacity:.3;
 }
 
-.progress{
-  display:flex;
-  justify-content:space-between;
-  font-size:.8rem;
+.achievement.unlocked{
+  opacity:1;
+  border-left:4px solid var(--accent);
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <div class="top">
-    <div class="title">REBIRTH CLICKER</div>
-    <button class="toggle" onclick="toggleTheme()">🌓</button>
+<div class="app">
+
+  <!-- GAME -->
+  <div class="panel">
+    <div class="title">CASUAL CLICKER</div>
+
+    <div class="score" id="score">0</div>
+    <div class="subtitle">ENERGÍA</div>
+
+    <button class="big-button" onclick="clickMain()">CLICK</button>
+
+    <div class="stats">
+      <span>Clicks: <b id="clicks">0</b></span>
+      <span>Rebirths: <b id="rebirths">0</b></span>
+    </div>
+
+    <button class="rebirth" onclick="rebirth()">REBIRTH (100 clicks)</button>
   </div>
 
-  <div class="counter">
-    <div class="value" id="score">0</div>
-    <div class="label">POWER</div>
+  <!-- SHOP -->
+  <div class="panel">
+    <div class="title">TIENDA</div>
+
+    <div class="shop-item">
+      <span>+1 por click</span>
+      <button onclick="buyUpgrade(1)">50</button>
+    </div>
+
+    <div class="shop-item">
+      <span>+5 por click</span>
+      <button onclick="buyUpgrade(5)">200</button>
+    </div>
+
+    <div class="shop-item">
+      <span>Auto click</span>
+      <button onclick="buyAuto()">500</button>
+    </div>
   </div>
 
-  <button class="action" onclick="clickMain()">CLICK</button>
-  <button class="secondary" onclick="rebirth()">REBIRTH</button>
+  <!-- ACHIEVEMENTS -->
+  <div class="panel achievements">
+    <div class="title">LOGROS</div>
 
-  <div class="info">
-    <span>Clicks: <b id="clicks">0</b></span>
-    <span>Rebirths: <b id="rebirths">0</b></span>
+    <div id="a1" class="achievement">Primer Click</div>
+    <div id="a2" class="achievement">100 Clicks</div>
+    <div id="a3" class="achievement">Primer Rebirth</div>
+    <div id="a4" class="achievement">Comprador</div>
+    <div id="a5" class="achievement">???</div>
   </div>
 
-  <div class="divider"></div>
-
-  <div class="section-title">PROGRESO</div>
-  <div class="progress">
-    <span>Siguiente rebirth</span>
-    <span id="next">100</span>
-  </div>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("rebirth_new_ui")) || {
+let game = JSON.parse(localStorage.getItem("casual_clicker")) || {
   score:0,
   clicks:0,
   rebirths:0,
-  theme:"light"
+  power:1,
+  auto:false,
+  achievements:{}
 };
 
-const scoreEl = document.getElementById("score");
-const clicksEl = document.getElementById("clicks");
-const rebirthsEl = document.getElementById("rebirths");
-const nextEl = document.getElementById("next");
-
 function save(){
-  localStorage.setItem("rebirth_new_ui",JSON.stringify(data));
+  localStorage.setItem("casual_clicker",JSON.stringify(game));
 }
 
 function update(){
-  scoreEl.textContent = data.score;
-  clicksEl.textContent = data.clicks;
-  rebirthsEl.textContent = data.rebirths;
-  nextEl.textContent = Math.max(0,100 - data.clicks);
-  document.body.classList.toggle("dark",data.theme==="dark");
+  score.textContent = game.score;
+  clicks.textContent = game.clicks;
+  rebirths.textContent = game.rebirths;
+
+  unlock("a1", game.clicks >= 1);
+  unlock("a2", game.clicks >= 100);
+  unlock("a3", game.rebirths >= 1);
+  unlock("a4", game.power > 1);
+  unlock("a5", game.rebirths >= 5);
+}
+
+function unlock(id,cond){
+  if(cond){
+    document.getElementById(id).classList.add("unlocked");
+  }
 }
 
 function clickMain(){
-  data.clicks++;
-  data.score += 1 + data.rebirths;
+  game.clicks++;
+  game.score += game.power;
   save();
   update();
 }
 
 function rebirth(){
-  if(data.clicks < 100){
-    alert("Necesitas 100 clicks");
-    return;
-  }
-  data.clicks = 0;
-  data.score = 0;
-  data.rebirths++;
+  if(game.clicks < 100) return alert("Necesitas 100 clicks");
+  game.clicks = 0;
+  game.score = 0;
+  game.rebirths++;
+  game.power = 1 + game.rebirths;
   save();
   update();
 }
 
-function toggleTheme(){
-  data.theme = data.theme === "light" ? "dark" : "light";
+function buyUpgrade(p){
+  if(game.score < (p===1?50:200)) return;
+  game.score -= (p===1?50:200);
+  game.power += p;
   save();
   update();
+}
+
+function buyAuto(){
+  if(game.score < 500 || game.auto) return;
+  game.score -= 500;
+  game.auto = true;
+  setInterval(()=>clickMain(),1000);
+  save();
+}
+
+if(game.auto){
+  setInterval(()=>clickMain(),1000);
 }
 
 update();
@@ -224,3 +273,4 @@ update();
 
 </body>
 </html>
+
