@@ -3,117 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>No Hagas Click</title>
+<title>Click Feliz</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  font-family: monospace;
-}
-
 body {
   margin: 0;
-  min-height: 100vh;
-  background: #0a0a0a;
-  color: #e5e5e5;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  transition: all 0.3s;
-  overflow: hidden;
+  background: linear-gradient(120deg, #1e3c72, #2a5298);
+  font-family: Arial, sans-serif;
+  transition: background 0.6s;
 }
 
-.container {
-  text-align: center;
-}
-
-h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
-}
-
-#btn {
-  padding: 20px 40px;
-  font-size: 1.4rem;
-  background: #111;
-  color: white;
-  border: 2px solid white;
+button {
+  padding: 40px 80px;
+  font-size: 2.5rem;
+  border: none;
+  border-radius: 20px;
   cursor: pointer;
+  background: white;
+  color: #333;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.shake {
-  animation: shake 0.1s infinite;
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 30px 60px rgba(0,0,0,0.4);
 }
 
-@keyframes shake {
-  0% { transform: translate(0,0); }
-  25% { transform: translate(5px,0); }
-  50% { transform: translate(0,5px); }
-  75% { transform: translate(-5px,0); }
-  100% { transform: translate(0,0); }
+button:active {
+  transform: scale(0.95);
 }
 
-.glitch {
-  text-shadow: 
-    2px 0 red,
-   -2px 0 cyan;
-}
-
-.popup {
-  position: absolute;
+.counter {
+  position: fixed;
+  bottom: 20px;
   font-size: 1.2rem;
-  opacity: 0.9;
+  color: white;
+  opacity: 0.7;
 }
 </style>
 </head>
 
 <body>
 
-<div class="container">
-  <h1 id="title">NO HAGAS CLICK</h1>
-  <button id="btn">click...</button>
-</div>
+<button id="btn">CLICK 😌</button>
+<div class="counter" id="count">Clicks: 0</div>
 
 <script>
 let clicks = 0;
+
 const btn = document.getElementById("btn");
-const title = document.getElementById("title");
+const count = document.getElementById("count");
 
 btn.addEventListener("click", () => {
   clicks++;
+  count.textContent = "Clicks: " + clicks;
 
   document.body.style.background =
-    `hsl(${Math.random()*360}, 60%, 10%)`;
+    `linear-gradient(120deg,
+     hsl(${Math.random()*360},60%,40%),
+     hsl(${Math.random()*360},60%,30%))`;
 
-  title.classList.toggle("glitch");
-
-  if (clicks > 5) {
-    document.body.classList.add("shake");
-  }
-
-  if (clicks > 10) {
-    btn.textContent = "para";
-  }
-
-  if (clicks > 15) {
-    btn.textContent = "ya es tarde";
-  }
-
-  if (clicks > 20) {
-    const msg = document.createElement("div");
-    msg.className = "popup";
-    msg.textContent = "¿por qué sigues?";
-    msg.style.left = Math.random()*100 + "vw";
-    msg.style.top = Math.random()*100 + "vh";
-    document.body.appendChild(msg);
-  }
-
-  if (clicks > 30) {
-    title.textContent = "TODO ESTÁ ROTO";
-  }
+  btn.textContent = "CLICK ✨";
 });
 </script>
 
 </body>
 </html>
+
 
