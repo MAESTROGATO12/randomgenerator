@@ -7,87 +7,110 @@
 
 <style>
 :root{
-  --bg:#f4f6ff;
+  --bg:#f2f4ff;
   --card:#ffffff;
-  --primary:#6c7cff;
-  --secondary:#ff7ac6;
-  --success:#22c55e;
-  --text:#1f2937;
+  --primary:#6366f1;
+  --accent:#ec4899;
+  --text:#111827;
   --muted:#6b7280;
-  --shadow:0 20px 40px rgba(0,0,0,.12);
+  --success:#22c55e;
+  --shadow:0 25px 50px rgba(0,0,0,.15);
 }
 
-*{box-sizing:border-box;font-family:system-ui,Segoe UI,sans-serif}
+body.dark{
+  --bg:#0b0f1a;
+  --card:#111827;
+  --primary:#818cf8;
+  --accent:#f472b6;
+  --text:#f9fafb;
+  --muted:#9ca3af;
+  --shadow:0 25px 60px rgba(0,0,0,.6);
+}
+
+*{
+  box-sizing:border-box;
+  font-family:system-ui,Segoe UI,sans-serif;
+}
 
 body{
   margin:0;
   min-height:100vh;
   background:
-    radial-gradient(circle at top left,#e0e7ff,transparent 40%),
-    radial-gradient(circle at bottom right,#ffe4f2,transparent 40%),
+    radial-gradient(circle at top left,var(--primary),transparent 40%),
+    radial-gradient(circle at bottom right,var(--accent),transparent 40%),
     var(--bg);
   display:flex;
   justify-content:center;
   align-items:center;
+  transition:.4s;
 }
 
 .app{
-  width:380px;
+  width:390px;
   background:var(--card);
-  border-radius:28px;
+  border-radius:30px;
   padding:28px;
   box-shadow:var(--shadow);
+  color:var(--text);
+  transition:.4s;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
 
 h1{
   margin:0;
-  text-align:center;
+  font-size:1.4rem;
+}
+
+.theme-btn{
+  background:none;
+  border:none;
+  font-size:1.2rem;
+  cursor:pointer;
   color:var(--text);
 }
 
-.subtitle{
-  text-align:center;
-  font-size:.9rem;
-  color:var(--muted);
-  margin-bottom:20px;
-}
-
 .score{
+  margin:24px 0 10px;
   text-align:center;
-  font-size:3rem;
-  font-weight:700;
+  font-size:3.2rem;
+  font-weight:800;
   color:var(--primary);
 }
 
-button{
+.main-btn{
   width:100%;
-  border:none;
-  border-radius:18px;
   padding:18px;
+  border:none;
+  border-radius:22px;
+  background:linear-gradient(135deg,var(--primary),var(--accent));
+  color:white;
   font-size:1.2rem;
   cursor:pointer;
-}
-
-.main-btn{
-  margin-top:20px;
-  background:linear-gradient(135deg,var(--primary),var(--secondary));
-  color:white;
-  box-shadow:0 10px 30px rgba(108,124,255,.4);
+  box-shadow:0 12px 35px rgba(99,102,241,.45);
 }
 
 .main-btn:active{transform:scale(.95)}
 
 .rebirth-btn{
   margin-top:12px;
-  background:#eef2ff;
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:18px;
+  background:rgba(99,102,241,.15);
   color:var(--primary);
-  font-size:.95rem;
+  cursor:pointer;
 }
 
 .stats{
   display:flex;
   justify-content:space-between;
-  margin-top:16px;
+  margin-top:14px;
   font-size:.8rem;
   color:var(--muted);
 }
@@ -95,20 +118,22 @@ button{
 .tabs{
   display:flex;
   gap:10px;
-  margin-top:24px;
+  margin-top:22px;
 }
 
 .tab{
   flex:1;
   padding:10px;
-  border-radius:14px;
-  background:#f1f5ff;
+  border-radius:16px;
+  border:none;
+  cursor:pointer;
+  background:rgba(99,102,241,.12);
   color:var(--primary);
   font-size:.8rem;
 }
 
 .tab.active{
-  background:var(--primary);
+  background:linear-gradient(135deg,var(--primary),var(--accent));
   color:white;
 }
 
@@ -120,17 +145,18 @@ button{
 .section.active{display:block}
 
 .achievement{
-  padding:10px;
-  border-radius:14px;
-  background:#f8f9ff;
-  margin-bottom:8px;
+  padding:12px;
+  border-radius:16px;
+  margin-bottom:10px;
+  background:rgba(99,102,241,.08);
   font-size:.8rem;
   color:var(--muted);
 }
 
 .achievement.unlocked{
-  background:#ecfdf5;
+  background:rgba(34,197,94,.15);
   color:var(--success);
+  font-weight:600;
 }
 </style>
 </head>
@@ -138,8 +164,10 @@ button{
 <body>
 
 <div class="app">
-  <h1>Click Game</h1>
-  <div class="subtitle">Juego casual</div>
+  <div class="header">
+    <h1>Click Game</h1>
+    <button class="theme-btn" onclick="toggleTheme()">🌙</button>
+  </div>
 
   <div class="score" id="score">0</div>
 
@@ -156,17 +184,17 @@ button{
     <button class="tab" onclick="showSection('achievements')">Logros</button>
   </div>
 
-  <div class="section active" id="game"></div>
-
-  <div class="section" id="achievements"></div>
+  <div id="game" class="section active"></div>
+  <div id="achievements" class="section"></div>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("clickGame")) || {
+let data = JSON.parse(localStorage.getItem("clickGame2")) || {
   score:0,
   clicks:0,
   rebirths:0,
-  achievements:[]
+  achievements:[],
+  theme:"light"
 };
 
 const scoreEl = document.getElementById("score");
@@ -174,31 +202,31 @@ const clicksEl = document.getElementById("clicks");
 const rebirthsEl = document.getElementById("rebirths");
 const achContainer = document.getElementById("achievements");
 
-const achievementList = [
-  {id:1, text:"Primer click", req:1},
-  {id:2, text:"10 clicks", req:10},
-  {id:3, text:"50 clicks", req:50},
-  {id:4, text:"100 clicks", req:100},
-  {id:5, text:"250 clicks", req:250},
-  {id:6, text:"500 clicks", req:500},
-  {id:7, text:"1000 clicks", req:1000},
-  {id:8, text:"Primer rebirth", rebirth:1},
-  {id:9, text:"5 rebirths", rebirth:5},
-  {id:10, text:"10 rebirths", rebirth:10},
-  {id:11, text:"Jugador persistente", req:2000},
-  {id:12, text:"Click master", req:5000},
-  {id:13, text:"Click god", req:10000},
-  {id:14, text:"Reborn", rebirth:3},
-  {id:15, text:"Renacido", rebirth:7},
-  {id:16, text:"Eterno", rebirth:15},
-  {id:17, text:"No paras", req:300},
-  {id:18, text:"Adicto", req:750},
-  {id:19, text:"Leyenda", req:20000},
-  {id:20, text:"Nunca termina", rebirth:20}
+const achievements = [
+  {id:1,text:"Primer click",req:1},
+  {id:2,text:"10 clicks",req:10},
+  {id:3,text:"50 clicks",req:50},
+  {id:4,text:"100 clicks",req:100},
+  {id:5,text:"250 clicks",req:250},
+  {id:6,text:"500 clicks",req:500},
+  {id:7,text:"1000 clicks",req:1000},
+  {id:8,text:"Primer rebirth",rebirth:1},
+  {id:9,text:"5 rebirths",rebirth:5},
+  {id:10,text:"10 rebirths",rebirth:10},
+  {id:11,text:"Persistente",req:2000},
+  {id:12,text:"Click master",req:5000},
+  {id:13,text:"Click god",req:10000},
+  {id:14,text:"Reborn",rebirth:3},
+  {id:15,text:"Renacido",rebirth:7},
+  {id:16,text:"Eterno",rebirth:15},
+  {id:17,text:"No paras",req:300},
+  {id:18,text:"Adicto",req:750},
+  {id:19,text:"Leyenda",req:20000},
+  {id:20,text:"Nunca termina",rebirth:20}
 ];
 
 function save(){
-  localStorage.setItem("clickGame",JSON.stringify(data));
+  localStorage.setItem("clickGame2",JSON.stringify(data));
 }
 
 function updateUI(){
@@ -206,6 +234,7 @@ function updateUI(){
   clicksEl.textContent = data.clicks;
   rebirthsEl.textContent = data.rebirths;
   renderAchievements();
+  document.body.classList.toggle("dark",data.theme==="dark");
 }
 
 function clickGame(){
@@ -227,7 +256,7 @@ function rebirth(){
 }
 
 function checkAchievements(){
-  achievementList.forEach(a=>{
+  achievements.forEach(a=>{
     if(data.achievements.includes(a.id)) return;
     if(a.req && data.clicks >= a.req) data.achievements.push(a.id);
     if(a.rebirth && data.rebirths >= a.rebirth) data.achievements.push(a.id);
@@ -235,25 +264,31 @@ function checkAchievements(){
 }
 
 function renderAchievements(){
-  achContainer.innerHTML = "";
-  achievementList.forEach(a=>{
-    const div = document.createElement("div");
-    div.className = "achievement";
+  achContainer.innerHTML="";
+  achievements.forEach(a=>{
+    const d=document.createElement("div");
+    d.className="achievement";
     if(data.achievements.includes(a.id)){
-      div.classList.add("unlocked");
-      div.textContent = "🏆 " + a.text;
+      d.classList.add("unlocked");
+      d.textContent="🏆 "+a.text;
     }else{
-      div.textContent = "🔒 " + a.text;
+      d.textContent="🔒 "+a.text;
     }
-    achContainer.appendChild(div);
+    achContainer.appendChild(d);
   });
 }
 
-function showSection(sec){
+function showSection(id){
   document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
   document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
-  document.getElementById(sec).classList.add("active");
-  document.querySelector(`button[onclick="showSection('${sec}')"]`).classList.add("active");
+  document.getElementById(id).classList.add("active");
+  document.querySelector(`button[onclick="showSection('${id}')"]`).classList.add("active");
+}
+
+function toggleTheme(){
+  data.theme = data.theme==="light" ? "dark" : "light";
+  save();
+  updateUI();
 }
 
 updateUI();
@@ -261,5 +296,3 @@ updateUI();
 
 </body>
 </html>
-
-
