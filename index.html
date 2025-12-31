@@ -3,26 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Click Infinito</title>
+<title>Click Infinito · Rebirth</title>
 
 <style>
 :root {
-  --bg: #0b0e1a;
-  --panel: #151a33;
-  --accent: #ff4d4d;
+  --bg: #080b14;
+  --panel: #11162b;
+  --accent: #ff3c3c;
+  --accent2: #ff8c00;
   --good: #2ecc71;
-  --text: #ffffff;
+  --text: #e5e7ff;
+  --muted: #9aa0ff;
 }
 
 * {
   box-sizing: border-box;
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
 body {
   margin: 0;
   height: 100vh;
-  background: radial-gradient(circle at top, #1c2150, var(--bg));
+  background:
+    radial-gradient(circle at top, #1b1f45, var(--bg));
   display: flex;
   justify-content: center;
   align-items: center;
@@ -30,95 +33,98 @@ body {
 }
 
 .game {
-  background: var(--panel);
-  border-radius: 22px;
-  padding: 40px;
-  width: 380px;
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
-  text-align: center;
+  width: 420px;
+  background: linear-gradient(180deg, #151a38, var(--panel));
+  border-radius: 26px;
+  padding: 36px;
+  box-shadow: 0 40px 100px rgba(0,0,0,0.7);
   position: relative;
 }
 
 h1 {
-  margin-top: 0;
+  margin: 0;
+  text-align: center;
+  letter-spacing: 4px;
   font-weight: 300;
-  letter-spacing: 3px;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-bottom: 20px;
 }
 
 .score {
-  font-size: 2.4rem;
-  margin: 20px 0;
+  font-size: 2.2rem;
+  text-align: center;
+  margin: 18px 0;
 }
 
-button.main {
+.main-btn {
   width: 100%;
-  padding: 32px;
+  padding: 28px;
   font-size: 2rem;
+  border-radius: 22px;
   border: none;
-  border-radius: 20px;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
   color: white;
   cursor: pointer;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-  transition: transform 0.1s ease, filter 0.2s;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  transition: transform 0.1s ease;
 }
 
-button.main:active {
+.main-btn:active {
   transform: scale(0.94);
-  filter: brightness(1.2);
 }
 
-.shop {
-  margin-top: 30px;
-  text-align: left;
+.section {
+  margin-top: 28px;
 }
 
-.shop h2 {
-  font-size: 1.2rem;
+.section h2 {
+  font-size: 1rem;
+  letter-spacing: 2px;
+  opacity: 0.7;
   margin-bottom: 10px;
-  opacity: 0.8;
 }
 
-.upgrade {
+.card {
+  background: rgba(255,255,255,0.05);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255,255,255,0.05);
-  padding: 12px;
-  border-radius: 14px;
-  margin-bottom: 10px;
 }
 
-.upgrade button {
+.card button {
   border: none;
   border-radius: 10px;
-  padding: 8px 14px;
-  cursor: pointer;
-  background: var(--good);
-  color: black;
+  padding: 6px 14px;
   font-weight: bold;
+  cursor: pointer;
 }
 
-.upgrade button:disabled {
+.buy {
+  background: var(--good);
+}
+
+.buy:disabled {
   background: #555;
   color: #999;
   cursor: not-allowed;
 }
 
-.achievements {
-  margin-top: 25px;
-  text-align: left;
-}
-
-.achievements h2 {
-  font-size: 1.1rem;
-  opacity: 0.8;
+.rebirth {
+  background: linear-gradient(135deg, #8a2be2, #ff1493);
+  color: white;
 }
 
 .achievement {
-  font-size: 0.9rem;
-  opacity: 0.4;
-  margin-top: 6px;
+  font-size: 0.85rem;
+  opacity: 0.3;
 }
 
 .achievement.unlocked {
@@ -132,11 +138,11 @@ button.main:active {
   left: 50%;
   transform: translateX(-50%);
   background: black;
-  padding: 12px 20px;
-  border-radius: 12px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 0.8rem;
   opacity: 0;
   transition: all 0.4s ease;
-  font-size: 0.9rem;
 }
 
 .toast.show {
@@ -149,128 +155,174 @@ button.main:active {
 <body>
 
 <div class="game">
-  <h1>CLICK INFINITO</h1>
+  <h1>CLICK ∞</h1>
+  <div class="subtitle">REBIRTH EDITION</div>
 
   <div class="score" id="score">0 clicks</div>
 
-  <button class="main" id="clickBtn">CLICK</button>
+  <button class="main-btn" id="clickBtn">CLICK</button>
 
-  <div class="shop">
-    <h2>Mejoras</h2>
-
-    <div class="upgrade">
+  <div class="section">
+    <h2>MEJORAS</h2>
+    <div class="card">
       <span>+1 por click</span>
-      <button id="upgradeClick">10</button>
+      <button class="buy" id="upClick">10</button>
     </div>
-
-    <div class="upgrade">
+    <div class="card">
       <span>Auto-clicker</span>
-      <button id="upgradeAuto">50</button>
+      <button class="buy" id="upAuto">50</button>
     </div>
   </div>
 
-  <div class="achievements">
-    <h2>Logros</h2>
-    <div id="ach1" class="achievement">👶 Primer click</div>
-    <div id="ach2" class="achievement">🔥 100 clicks</div>
-    <div id="ach3" class="achievement">🤖 Primer auto-clicker</div>
-    <div id="ach4" class="achievement">💀 ¿Sigues aquí?</div>
+  <div class="section">
+    <h2>REBIRTH</h2>
+    <div class="card">
+      <span>Reinicia y gana bonus</span>
+      <button class="rebirth" id="rebirthBtn">1000</button>
+    </div>
   </div>
 
-  <div class="toast" id="toast">Logro desbloqueado</div>
+  <div class="section">
+    <h2>LOGROS</h2>
+    <div id="achievements"></div>
+  </div>
+
+  <div class="toast" id="toast"></div>
 </div>
 
 <script>
 let game = {
   clicks: 0,
   perClick: 1,
-  autoClickers: 0,
+  auto: 0,
+  rebirths: 0,
   costClick: 10,
   costAuto: 50,
+  costRebirth: 1000,
   achievements: {}
 };
 
+const ACHIEVEMENTS = [
+  {id:"a1", text:"Primer click", cond:()=>game.clicks>=1},
+  {id:"a2", text:"100 clicks", cond:()=>game.clicks>=100},
+  {id:"a3", text:"1k clicks", cond:()=>game.clicks>=1000},
+  {id:"a4", text:"10k clicks", cond:()=>game.clicks>=10000},
+  {id:"a5", text:"Primer auto", cond:()=>game.auto>=1},
+  {id:"a6", text:"10 autos", cond:()=>game.auto>=10},
+  {id:"a7", text:"Primer rebirth", cond:()=>game.rebirths>=1},
+  {id:"a8", text:"5 rebirths", cond:()=>game.rebirths>=5},
+  {id:"a9", text:"20 rebirths", cond:()=>game.rebirths>=20},
+
+  // ocultos
+  {id:"s1", text:"👁️ No pares", cond:()=>game.clicks>=666, secret:true},
+  {id:"s2", text:"💀 ¿Vida?", cond:()=>game.clicks>=50000, secret:true},
+  {id:"s3", text:"∞ Adicción", cond:()=>game.auto>=25, secret:true},
+  {id:"s4", text:"Reset eterno", cond:()=>game.rebirths>=10, secret:true}
+];
+
 const scoreEl = document.getElementById("score");
 const toast = document.getElementById("toast");
+const achContainer = document.getElementById("achievements");
 
-function saveGame() {
-  localStorage.setItem("clickInfinitoSave", JSON.stringify(game));
+function save() {
+  localStorage.setItem("clickRebirthSave", JSON.stringify(game));
 }
 
-function loadGame() {
-  const save = localStorage.getItem("clickInfinitoSave");
-  if (save) game = JSON.parse(save);
+function load() {
+  const s = localStorage.getItem("clickRebirthSave");
+  if (s) game = JSON.parse(s);
 }
 
 function showToast(text) {
   toast.textContent = text;
   toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2500);
+  setTimeout(()=>toast.classList.remove("show"),2000);
 }
 
-function unlock(id, text) {
-  if (!game.achievements[id]) {
-    game.achievements[id] = true;
-    document.getElementById(id).classList.add("unlocked");
-    showToast(text);
-    saveGame();
-  }
+function checkAchievements() {
+  ACHIEVEMENTS.forEach(a=>{
+    if (!game.achievements[a.id] && a.cond()) {
+      game.achievements[a.id] = true;
+      showToast("Logro desbloqueado");
+      save();
+    }
+  });
 }
 
-function updateUI() {
+function renderAchievements() {
+  achContainer.innerHTML = "";
+  ACHIEVEMENTS.forEach(a=>{
+    const div = document.createElement("div");
+    div.className = "achievement";
+    if (game.achievements[a.id]) {
+      div.classList.add("unlocked");
+      div.textContent = a.text;
+    } else {
+      div.textContent = a.secret ? "???" : a.text;
+    }
+    achContainer.appendChild(div);
+  });
+}
+
+function update() {
   scoreEl.textContent = game.clicks + " clicks";
-  upgradeClick.textContent = game.costClick;
-  upgradeAuto.textContent = game.costAuto;
+  upClick.textContent = game.costClick;
+  upAuto.textContent = game.costAuto;
+  rebirthBtn.textContent = game.costRebirth;
 
-  upgradeClick.disabled = game.clicks < game.costClick;
-  upgradeAuto.disabled = game.clicks < game.costAuto;
+  upClick.disabled = game.clicks < game.costClick;
+  upAuto.disabled = game.clicks < game.costAuto;
+  rebirthBtn.disabled = game.clicks < game.costRebirth;
 
-  for (let id in game.achievements) {
-    document.getElementById(id).classList.add("unlocked");
-  }
+  checkAchievements();
+  renderAchievements();
 }
 
-clickBtn.onclick = () => {
-  game.clicks += game.perClick;
-
-  if (game.clicks >= 1) unlock("ach1", "Primer click");
-  if (game.clicks >= 100) unlock("ach2", "100 clicks");
-  if (game.clicks >= 1000) unlock("ach4", "¿Sigues aquí?");
-
-  saveGame();
-  updateUI();
+clickBtn.onclick = ()=>{
+  game.clicks += game.perClick * (1 + game.rebirths * 0.5);
+  save();
+  update();
 };
 
-upgradeClick.onclick = () => {
-  if (game.clicks >= game.costClick) {
-    game.clicks -= game.costClick;
-    game.perClick++;
-    game.costClick = Math.floor(game.costClick * 1.8);
-    saveGame();
-    updateUI();
+upClick.onclick = ()=>{
+  game.clicks -= game.costClick;
+  game.perClick++;
+  game.costClick = Math.floor(game.costClick * 1.7);
+  save();
+  update();
+};
+
+upAuto.onclick = ()=>{
+  game.clicks -= game.costAuto;
+  game.auto++;
+  game.costAuto = Math.floor(game.costAuto * 2);
+  save();
+  update();
+};
+
+rebirthBtn.onclick = ()=>{
+  if (confirm("¿Hacer rebirth?")) {
+    game.clicks = 0;
+    game.perClick = 1;
+    game.auto = 0;
+    game.costClick = 10;
+    game.costAuto = 50;
+    game.rebirths++;
+    game.costRebirth = Math.floor(game.costRebirth * 2);
+    showToast("REBIRTH");
+    save();
+    update();
   }
 };
 
-upgradeAuto.onclick = () => {
-  if (game.clicks >= game.costAuto) {
-    game.clicks -= game.costAuto;
-    game.autoClickers++;
-    game.costAuto = Math.floor(game.costAuto * 2);
-    unlock("ach3", "Primer auto-clicker");
-    saveGame();
-    updateUI();
-  }
-};
+setInterval(()=>{
+  game.clicks += game.auto * (1 + game.rebirths * 0.5);
+  update();
+},1000);
 
-setInterval(() => {
-  game.clicks += game.autoClickers;
-  updateUI();
-}, 1000);
-
-loadGame();
-updateUI();
+load();
+update();
 </script>
 
 </body>
 </html>
-
