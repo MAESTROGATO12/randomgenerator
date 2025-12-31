@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>casual clicker</title>
 
 <style>
@@ -27,74 +27,66 @@ body.light{
 body{
   background:radial-gradient(circle at top,var(--panel),var(--bg));
   color:var(--text);
-  font-family:system-ui,-apple-system,BlinkMacSystemFont;
+  font-family:system-ui;
   min-height:100vh;
   display:flex;
-  align-items:center;
   justify-content:center;
-  overscroll-behavior:none;
+  align-items:center;
 }
 
-/* ===== LAYOUT ===== */
-.app{
-  width:100%;
-  max-width:430px;
-  padding:18px;
+/* ===== START ===== */
+#start{
+  position:fixed;
+  inset:0;
+  background:var(--bg);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:50;
 }
-.card{
-  background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--panel);
-  border-radius:28px;
-  padding:26px 22px 30px;
-  box-shadow:0 40px 90px rgba(0,0,0,.6);
-  text-align:center;
-}
-
-/* ===== COUNTER ===== */
-.counter{
-  font-size:clamp(3.5rem,10vw,5.5rem);
+#start button{
+  font-size:2rem;
+  padding:26px 50px;
+  border-radius:30px;
+  border:none;
+  background:linear-gradient(135deg,var(--accent),var(--accent-soft));
+  color:#fff;
   font-weight:900;
-  letter-spacing:-.04em;
-  margin-bottom:6px;
-  transition:.15s ease;
-}
-.counter.bump{transform:scale(1.05)}
-.sub{
-  font-size:.85rem;
-  color:var(--muted);
-  margin-bottom:26px;
 }
 
-/* ===== MAIN BUTTON ===== */
+/* ===== APP ===== */
+.app{width:100%;max-width:430px;padding:18px}
+.card{
+  background:var(--panel);
+  border-radius:30px;
+  padding:28px 24px;
+  text-align:center;
+  box-shadow:0 40px 90px rgba(0,0,0,.6);
+}
+.counter{
+  font-size:4.8rem;
+  font-weight:900;
+}
+.sub{color:var(--muted);margin-bottom:20px}
 .tap{
   width:100%;
   height:90px;
-  border-radius:24px;
+  border-radius:26px;
   border:none;
   font-size:1.3rem;
   font-weight:900;
   background:linear-gradient(135deg,var(--accent),var(--accent-soft));
   color:#fff;
-  cursor:pointer;
-  box-shadow:0 15px 40px rgba(239,68,68,.45);
-  transition:.1s ease;
 }
-.tap:active{transform:scale(.96)}
-
-/* ===== MENU ===== */
-.menu{
-  display:flex;
-  gap:12px;
-  margin-top:18px;
-}
+.menu{display:flex;gap:12px;margin-top:18px}
 .menu button{
   flex:1;
-  padding:14px 0;
+  padding:14px;
   border-radius:16px;
   border:none;
   background:rgba(255,255,255,.05);
   color:var(--text);
   font-size:1.1rem;
-  cursor:pointer;
 }
 
 /* ===== MODALS ===== */
@@ -104,8 +96,6 @@ body{
   background:rgba(0,0,0,.7);
   display:none;
   align-items:flex-end;
-  justify-content:center;
-  z-index:20;
 }
 .modal.active{display:flex}
 .sheet{
@@ -114,52 +104,26 @@ body{
   background:var(--panel);
   border-radius:26px 26px 0 0;
   padding:24px;
-  animation:slide .25s ease;
 }
-@keyframes slide{
-  from{transform:translateY(30px);opacity:0}
-}
-.sheet h2{
-  font-size:1.4rem;
-  margin-bottom:18px;
-}
-
-/* ===== SHOP ===== */
-.item{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:14px;
-}
-.item button{
-  padding:8px 18px;
-  border-radius:14px;
-  border:none;
-  background:var(--accent);
-  color:#fff;
-  font-weight:700;
-}
+.sheet h2{margin-bottom:14px}
 
 /* ===== ACHIEVEMENTS ===== */
 .ach{
-  font-size:.85rem;
-  padding:10px 0;
-  border-bottom:1px solid rgba(255,255,255,.08);
+  font-size:.8rem;
+  padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.1);
   opacity:.35;
 }
 .ach.ok{opacity:1;color:var(--good)}
-
-/* ===== FOOT ===== */
-.foot{
-  margin-top:14px;
-  font-size:.65rem;
-  color:var(--muted);
-  text-align:center;
-}
+.ach.hidden{opacity:.15;font-style:italic}
 </style>
 </head>
 
 <body>
+
+<div id="start">
+  <button onclick="startGame()">INICIAR</button>
+</div>
 
 <div class="app">
   <div class="card">
@@ -172,16 +136,15 @@ body{
       <button onclick="theme()">🌗</button>
     </div>
   </div>
-  <div class="foot">REBIRTH · autosave</div>
 </div>
 
 <!-- SHOP -->
 <div id="shop" class="modal">
   <div class="sheet">
     <h2>Tienda</h2>
-    <div class="item"><span>+1 tap</span><button onclick="buyP()">50</button></div>
-    <div class="item"><span>Auto +1/s</span><button onclick="buyA()">250</button></div>
-    <button class="menu" onclick="closeM()">Cerrar</button>
+    <button onclick="buyP()">+1 tap (50)</button><br><br>
+    <button onclick="buyA()">Auto +1/s (250)</button><br><br>
+    <button onclick="closeM()">Cerrar</button>
   </div>
 </div>
 
@@ -189,60 +152,75 @@ body{
 <div id="ach" class="modal">
   <div class="sheet">
     <h2>Logros</h2>
-    <div id="a1" class="ach">Primer tap</div>
-    <div id="a2" class="ach">100 puntos</div>
-    <div id="a3" class="ach">Primer rebirth</div>
-    <div id="a4" class="ach">Automático</div>
-    <button class="menu" onclick="closeM()">Cerrar</button>
+    <div id="achList"></div>
+    <button onclick="closeM()">Cerrar</button>
   </div>
 </div>
 
 <script>
 let g = JSON.parse(localStorage.getItem("rb_save")) || {
-  v:0,p:1,a:0,r:0,t:"dark",last:Date.now()
+  v:0,p:1,a:0,r:0,t:"dark",started:false
 };
+
+const achievements=[
+  ...Array.from({length:45},(_,i)=>({t:`Logro ${i+1}`,c:()=>g.v>=(i+1)*50})),
+  {t:"¿Qué hiciste?",c:()=>g.v===666,h:true},
+  {t:"Sin tocar",c:()=>g.a>=5&&g.p===1,h:true},
+  {t:"Reinicio eterno",c:()=>g.r>=10,h:true},
+  {t:"No duermes",c:()=>g.v>=10000,h:true},
+  {t:"Esto no era normal",c:()=>localStorage.length>5,h:true},
+];
+
+function startGame(){
+  g.started=true;
+  document.getElementById("start").style.display="none";
+  save();
+}
+
+if(g.started)document.getElementById("start").style.display="none";
 if(g.t==="light")document.body.classList.add("light");
 
-function save(){g.last=Date.now();localStorage.setItem("rb_save",JSON.stringify(g))}
-
+function save(){localStorage.setItem("rb_save",JSON.stringify(g))}
 function upd(){
   count.textContent=Math.floor(g.v);
   info.textContent=`+${g.p}/tap · +${g.a}/s · rebirth ${g.r}`;
-  unlock(a1,g.v>0);
-  unlock(a2,g.v>=100);
-  unlock(a3,g.r>0);
-  unlock(a4,g.a>0);
-  save()
+  renderAch();
+  save();
 }
-function unlock(el,c){if(c)el.classList.add("ok")}
-
 function tap(){
   g.v+=g.p;
-  count.classList.add("bump");
-  setTimeout(()=>count.classList.remove("bump"),120);
-  if(g.v>=1000){
-    g.v=0;g.r++;g.p++
-  }
-  upd()
+  if(g.v>=1000){g.v=0;g.r++;g.p++}
+  upd();
 }
 function buyP(){if(g.v<50)return;g.v-=50;g.p++;upd()}
 function buyA(){if(g.v<250)return;g.v-=250;g.a++;upd()}
 
+function renderAch(){
+  achList.innerHTML="";
+  achievements.forEach(a=>{
+    let d=document.createElement("div");
+    let ok=a.c();
+    d.className="ach"+(ok?" ok":"")+(a.h?" hidden":"");
+    d.textContent=a.h&&!ok?"Logro oculto":a.t;
+    achList.appendChild(d);
+  });
+}
+
 function openM(id){document.getElementById(id).classList.add("active")}
 function closeM(){document.querySelectorAll(".modal").forEach(m=>m.classList.remove("active"))}
-
 function theme(){
   document.body.classList.toggle("light");
   g.t=document.body.classList.contains("light")?"light":"dark";
-  save()
+  save();
 }
 
-let diff=Math.floor((Date.now()-g.last)/1000);
-if(diff>0)g.v+=g.a*diff;
 setInterval(()=>{g.v+=g.a;upd()},1000);
-
-upd()
+upd();
 </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
