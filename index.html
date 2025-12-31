@@ -6,222 +6,145 @@
 <title>REBIRTH CLICKER</title>
 
 <style>
-/* =========================
-   VARIABLES / TEMAS
-========================= */
 :root {
-  --bg: #0f172a;
-  --panel: #111827;
-  --text: #e5e7eb;
-  --muted: #9ca3af;
-  --accent: #22d3ee;
-  --good: #22c55e;
+  --bg:#0f172a;--panel:#111827;--text:#e5e7eb;--muted:#9ca3af;
+  --accent:#22d3ee;--good:#22c55e
+}
+body.light{
+  --bg:#f8fafc;--panel:#fff;--text:#0f172a;--muted:#475569;
+  --accent:#2563eb;--good:#16a34a
+}
+*{box-sizing:border-box;margin:0}
+body{
+  font-family:system-ui;
+  background:var(--bg);
+  color:var(--text);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center
 }
 
-body.light {
-  --bg: #f8fafc;
-  --panel: #ffffff;
-  --text: #0f172a;
-  --muted: #475569;
-  --accent: #2563eb;
-  --good: #16a34a;
+/* ===== PANTALLA START ===== */
+.start{
+  position:fixed;inset:0;
+  background:linear-gradient(160deg,var(--bg),#020617);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  z-index:20
+}
+.start h1{font-size:3rem;margin-bottom:10px}
+.start p{color:var(--muted);margin-bottom:30px}
+.start button{
+  padding:18px 40px;
+  font-size:1.2rem;
+  border:none;border-radius:20px;
+  background:var(--accent);
+  cursor:pointer
 }
 
-/* =========================
-   RESET
-========================= */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* ===== JUEGO ===== */
+.app{width:100%;max-width:520px;padding:24px;text-align:center}
+.panel{
+  background:var(--panel);
+  border-radius:24px;
+  padding:36px 26px;
+  box-shadow:0 25px 70px rgba(0,0,0,.35)
+}
+.counter{
+  font-size:clamp(3.5rem,8vw,5rem);
+  font-weight:900;margin-bottom:8px
+}
+.hint{font-size:.85rem;color:var(--muted);margin-bottom:26px}
+
+.main-btn{
+  width:100%;padding:20px;
+  font-size:1.25rem;font-weight:800;
+  border:none;border-radius:18px;
+  background:linear-gradient(135deg,var(--accent),#38bdf8);
+  cursor:pointer;margin-bottom:22px
+}
+.main-btn:active{transform:scale(.97)}
+
+.actions{display:flex;gap:10px}
+.action-btn{
+  flex:1;padding:12px;border-radius:14px;
+  background:transparent;color:var(--text);
+  border:1px solid rgba(255,255,255,.1);
+  cursor:pointer
 }
 
-/* =========================
-   LAYOUT
-========================= */
-.app {
-  width: 100%;
-  max-width: 520px;
-  padding: 24px;
-  text-align: center;
+.footer{margin-top:14px;font-size:.65rem;color:var(--muted)}
+
+/* ===== MODALES ===== */
+.modal{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,.65);
+  display:none;align-items:center;justify-content:center;
+  z-index:10
+}
+.modal.active{display:flex}
+.modal-box{
+  background:var(--panel);
+  width:90%;max-width:420px;
+  border-radius:22px;
+  padding:26px;text-align:left
+}
+.modal h2{margin-bottom:16px}
+
+/* ===== TIENDA ===== */
+.shop-item{
+  display:flex;justify-content:space-between;
+  margin-bottom:14px
+}
+.shop-item button{
+  padding:6px 14px;border-radius:10px;
+  border:none;background:var(--accent);
+  cursor:pointer
 }
 
-.panel {
-  background: var(--panel);
-  border-radius: 22px;
-  padding: 32px 24px;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+/* ===== LOGROS ===== */
+.achievement{
+  font-size:.85rem;padding:8px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
+  opacity:.3
 }
-
-/* =========================
-   CONTADOR
-========================= */
-.counter {
-  font-size: clamp(3.5rem, 8vw, 5rem);
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-
-.hint {
-  font-size: 0.9rem;
-  color: var(--muted);
-  margin-bottom: 28px;
-}
-
-/* =========================
-   BOTÓN PRINCIPAL
-========================= */
-.main-btn {
-  width: 100%;
-  padding: 18px;
-  font-size: 1.2rem;
-  font-weight: 700;
-  border: none;
-  border-radius: 16px;
-  background: linear-gradient(135deg, var(--accent), #38bdf8);
-  color: #000;
-  cursor: pointer;
-  margin-bottom: 22px;
-}
-
-.main-btn:active {
-  transform: scale(0.98);
-}
-
-/* =========================
-   BARRA DE BOTONES
-========================= */
-.actions {
-  display: flex;
-  gap: 10px;
-}
-
-.action-btn {
-  flex: 1;
-  padding: 12px;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: transparent;
-  color: var(--text);
-  cursor: pointer;
-}
-
-/* =========================
-   MODALES
-========================= */
-.modal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.6);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10;
-}
-
-.modal.active { display: flex; }
-
-.modal-box {
-  background: var(--panel);
-  width: 90%;
-  max-width: 420px;
-  border-radius: 20px;
-  padding: 24px;
-  text-align: left;
-}
-
-.modal h2 {
-  margin-bottom: 16px;
-}
-
-/* =========================
-   TIENDA
-========================= */
-.shop-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 14px;
-}
-
-.shop-item button {
-  padding: 6px 12px;
-  border-radius: 10px;
-  border: none;
-  background: var(--accent);
-  color: #000;
-  cursor: pointer;
-}
-
-/* =========================
-   LOGROS
-========================= */
-.achievement {
-  font-size: 0.85rem;
-  padding: 8px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.08);
-  opacity: 0.3;
-}
-
-.achievement.unlocked {
-  opacity: 1;
-  color: var(--good);
-}
-
-/* =========================
-   FOOTER
-========================= */
-.footer {
-  margin-top: 16px;
-  font-size: 0.7rem;
-  color: var(--muted);
-  text-align: center;
+.achievement.unlocked{
+  opacity:1;color:var(--good)
 }
 </style>
 </head>
 
 <body>
+
+<!-- START -->
+<div class="start" id="start">
+  <h1>REBIRTH CLICKER</h1>
+  <p>Idle · Rebirth · Progreso infinito</p>
+  <button onclick="startGame()">JUGAR</button>
+</div>
+
+<!-- JUEGO -->
 <div class="app">
   <div class="panel">
-
     <div class="counter" id="counter">0</div>
-    <div class="hint" id="hint">Pulsa para empezar</div>
-
+    <div class="hint" id="hint"></div>
     <button class="main-btn" onclick="clickMain()">PULSAR</button>
-
     <div class="actions">
-      <button class="action-btn" onclick="openModal('shop')">🛒 Tienda</button>
-      <button class="action-btn" onclick="openModal('ach')">🏆 Logros</button>
+      <button class="action-btn" onclick="openModal('shop')">🛒</button>
+      <button class="action-btn" onclick="openModal('ach')">🏆</button>
       <button class="action-btn" onclick="toggleTheme()">🌙</button>
     </div>
-
   </div>
-
-  <div class="footer">
-    progreso guardado automáticamente
-  </div>
+  <div class="footer">v1.0 · guardado automático</div>
 </div>
 
 <!-- TIENDA -->
 <div class="modal" id="shop">
   <div class="modal-box">
     <h2>Tienda</h2>
-
-    <div class="shop-item">
-      <span>+1 por click</span>
-      <button onclick="buyPower(1, 50)">50</button>
-    </div>
-
-    <div class="shop-item">
-      <span>Auto +1 /s</span>
-      <button onclick="buyAuto()">200</button>
-    </div>
-
+    <div class="shop-item"><span>+1 por click</span><button onclick="buyPower()">50</button></div>
+    <div class="shop-item"><span>Auto +1/s</span><button onclick="buyAuto()">200</button></div>
     <button class="action-btn" onclick="closeModal()">Cerrar</button>
   </div>
 </div>
@@ -230,118 +153,61 @@ body {
 <div class="modal" id="ach">
   <div class="modal-box">
     <h2>Logros</h2>
-
     <div id="a1" class="achievement">Primer click</div>
     <div id="a2" class="achievement">100 puntos</div>
     <div id="a3" class="achievement">Primer rebirth</div>
-    <div id="a4" class="achievement">Auto activado</div>
-
+    <div id="a4" class="achievement">Auto activo</div>
     <button class="action-btn" onclick="closeModal()">Cerrar</button>
   </div>
 </div>
 
 <script>
-/* =========================
-   DATOS
-========================= */
-let game = JSON.parse(localStorage.getItem("idle_game")) || {
-  value: 0,
-  power: 1,
-  auto: 0,
-  rebirths: 0,
-  theme: "dark",
-  last: Date.now()
+let game = JSON.parse(localStorage.getItem("rc_save")) || {
+  value:0,power:1,auto:0,rebirths:0,theme:"dark",started:false,last:Date.now()
 };
+if(game.theme==="light")document.body.classList.add("light");
+if(game.started)document.getElementById("start").style.display="none";
 
-if(game.theme === "light") document.body.classList.add("light");
+function startGame(){
+  game.started=true;
+  document.getElementById("start").style.display="none";
+  save()
+}
 
-/* =========================
-   UI
-========================= */
 function update(){
-  counter.textContent = Math.floor(game.value);
-  hint.textContent = `+${game.power} por click · +${game.auto}/s`;
-
-  unlock("a1", game.value > 0);
-  unlock("a2", game.value >= 100);
-  unlock("a3", game.rebirths > 0);
-  unlock("a4", game.auto > 0);
-
-  save();
+  counter.textContent=Math.floor(game.value);
+  hint.textContent=`+${game.power}/click · +${game.auto}/s · rebirths ${game.rebirths}`;
+  unlock("a1",game.value>0);
+  unlock("a2",game.value>=100);
+  unlock("a3",game.rebirths>0);
+  unlock("a4",game.auto>0);
+  save()
 }
+function unlock(id,c){if(c)document.getElementById(id).classList.add("unlocked")}
 
-function unlock(id, cond){
-  if(cond) document.getElementById(id).classList.add("unlocked");
-}
-
-/* =========================
-   JUEGO
-========================= */
 function clickMain(){
-  game.value += game.power;
-  checkRebirth();
-  update();
-}
-
-function buyPower(p, cost){
-  if(game.value < cost) return;
-  game.value -= cost;
-  game.power += p;
-  update();
-}
-
-function buyAuto(){
-  if(game.value < 200) return;
-  game.value -= 200;
-  game.auto += 1;
-  update();
-}
-
-function checkRebirth(){
-  if(game.value >= 1000){
-    game.value = 0;
-    game.rebirths++;
-    game.power += 1;
+  game.value+=game.power;
+  if(game.value>=1000){
+    game.value=0;game.rebirths++;game.power++
   }
+  update()
 }
+function buyPower(){if(game.value<50)return;game.value-=50;game.power++;update()}
+function buyAuto(){if(game.value<200)return;game.value-=200;game.auto++;update()}
 
-/* =========================
-   IDLE + OFFLINE
-========================= */
-function tick(sec){
-  game.value += game.auto * sec;
-  checkRebirth();
-}
+function tick(s){game.value+=game.auto*s}
+let diff=Math.floor((Date.now()-game.last)/1000);if(diff>0)tick(diff);
+setInterval(()=>{tick(1);update()},1000);
 
-const now = Date.now();
-const diff = Math.floor((now - game.last) / 1000);
-if(diff > 0) tick(diff);
-
-setInterval(() => {
-  tick(1);
-  update();
-}, 1000);
-
-/* =========================
-   MODALES / TEMA
-========================= */
-function openModal(id){ document.getElementById(id).classList.add("active"); }
-function closeModal(){
-  document.querySelectorAll(".modal").forEach(m => m.classList.remove("active"));
-}
-
+function openModal(id){document.getElementById(id).classList.add("active")}
+function closeModal(){document.querySelectorAll(".modal").forEach(m=>m.classList.remove("active"))}
 function toggleTheme(){
   document.body.classList.toggle("light");
-  game.theme = document.body.classList.contains("light") ? "light" : "dark";
-  save();
+  game.theme=document.body.classList.contains("light")?"light":"dark";save()
 }
-
-function save(){
-  game.last = Date.now();
-  localStorage.setItem("idle_game", JSON.stringify(game));
-}
-
-update();
+function save(){game.last=Date.now();localStorage.setItem("rc_save",JSON.stringify(game))}
+update()
 </script>
 </body>
 </html>
+
