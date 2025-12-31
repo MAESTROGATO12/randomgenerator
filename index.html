@@ -7,221 +7,197 @@
 
 <style>
 :root{
-  --bg:#05070d;
-  --panel:#0b1020;
-  --text:#e5e7eb;
+  --bg:#0a0a0a;
+  --card:#141414;
+  --accent:#ff3b3b;
+  --text:#f5f5f5;
   --muted:#9ca3af;
-  --accent:#ef4444;
-  --accent-soft:#fb7185;
-  --good:#22c55e;
 }
-body.light{
-  --bg:#f9fafb;
-  --panel:#ffffff;
-  --text:#020617;
-  --muted:#475569;
-  --accent:#dc2626;
-  --accent-soft:#f87171;
-}
-*{margin:0;padding:0;box-sizing:border-box}
 body{
-  background:radial-gradient(circle at top,var(--panel),var(--bg));
-  color:var(--text);
+  margin:0;
   font-family:system-ui;
+  background:linear-gradient(180deg,#000,#0a0a0a);
+  color:var(--text);
   min-height:100vh;
   display:flex;
   justify-content:center;
-  align-items:center;
 }
-
-/* ===== START ===== */
-#start{
-  position:fixed;
-  inset:0;
-  background:var(--bg);
+.app{
+  width:100%;
+  max-width:420px;
   display:flex;
-  justify-content:center;
-  align-items:center;
-  z-index:50;
+  flex-direction:column;
 }
-#start button{
-  font-size:2rem;
-  padding:26px 50px;
-  border-radius:30px;
-  border:none;
-  background:linear-gradient(135deg,var(--accent),var(--accent-soft));
-  color:#fff;
-  font-weight:900;
-}
-
-/* ===== APP ===== */
-.app{width:100%;max-width:430px;padding:18px}
-.card{
-  background:var(--panel);
-  border-radius:30px;
-  padding:28px 24px;
+header{
+  padding:20px;
   text-align:center;
-  box-shadow:0 40px 90px rgba(0,0,0,.6);
+  font-weight:900;
+  font-size:1.6rem;
 }
 .counter{
-  font-size:4.8rem;
+  font-size:5rem;
   font-weight:900;
+  text-align:center;
+  margin:20px 0;
 }
-.sub{color:var(--muted);margin-bottom:20px}
 .tap{
-  width:100%;
+  margin:0 20px;
   height:90px;
-  border-radius:26px;
+  border-radius:30px;
   border:none;
-  font-size:1.3rem;
-  font-weight:900;
-  background:linear-gradient(135deg,var(--accent),var(--accent-soft));
+  background:var(--accent);
   color:#fff;
+  font-size:1.4rem;
+  font-weight:900;
 }
-.menu{display:flex;gap:12px;margin-top:18px}
-.menu button{
+.nav{
+  display:flex;
+  gap:12px;
+  padding:20px;
+}
+.nav button{
   flex:1;
   padding:14px;
-  border-radius:16px;
+  border-radius:18px;
   border:none;
-  background:rgba(255,255,255,.05);
+  background:var(--card);
   color:var(--text);
   font-size:1.1rem;
 }
-
-/* ===== MODALS ===== */
-.modal{
+.section{
+  padding:20px;
+}
+.panel{
+  background:var(--card);
+  border-radius:26px;
+  padding:20px;
+  margin-bottom:20px;
+}
+.panel h2{
+  margin:0 0 12px;
+}
+.list{
+  max-height:320px;
+  overflow-y:auto;
+}
+.item{
+  padding:10px 0;
+  border-bottom:1px solid rgba(255,255,255,.1);
+  font-size:.9rem;
+  opacity:.4;
+}
+.item.ok{opacity:1;color:#22c55e}
+.hidden{font-style:italic}
+.start{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,.7);
-  display:none;
-  align-items:flex-end;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:10;
 }
-.modal.active{display:flex}
-.sheet{
-  width:100%;
-  max-width:430px;
-  background:var(--panel);
-  border-radius:26px 26px 0 0;
-  padding:24px;
+.start button{
+  font-size:2.2rem;
+  padding:28px 50px;
+  border-radius:40px;
+  border:none;
+  background:var(--accent);
+  color:#fff;
+  font-weight:900;
 }
-.sheet h2{margin-bottom:14px}
-
-/* ===== ACHIEVEMENTS ===== */
-.ach{
-  font-size:.8rem;
-  padding:8px 0;
-  border-bottom:1px solid rgba(255,255,255,.1);
-  opacity:.35;
-}
-.ach.ok{opacity:1;color:var(--good)}
-.ach.hidden{opacity:.15;font-style:italic}
 </style>
 </head>
 
 <body>
 
-<div id="start">
-  <button onclick="startGame()">INICIAR</button>
+<div id="start" class="start">
+  <button onclick="start()">INICIAR</button>
 </div>
 
 <div class="app">
-  <div class="card">
-    <div id="count" class="counter">0</div>
-    <div id="info" class="sub"></div>
-    <button class="tap" onclick="tap()">TAP</button>
-    <div class="menu">
-      <button onclick="openM('shop')">🛒</button>
-      <button onclick="openM('ach')">🏆</button>
-      <button onclick="theme()">🌗</button>
+  <header>CASUAL CLICK</header>
+
+  <div id="count" class="counter">0</div>
+  <button class="tap" onclick="tap()">CLICK</button>
+
+  <div class="nav">
+    <button onclick="show('shop')">🛒</button>
+    <button onclick="show('ach')">🏆</button>
+    <button onclick="reset()">♻</button>
+  </div>
+
+  <div class="section" id="shop" style="display:none">
+    <div class="panel">
+      <h2>Tienda</h2>
+      <button onclick="buyTap()">+1 por click (50)</button><br><br>
+      <button onclick="buyAuto()">Auto +1/s (200)</button>
+    </div>
+  </div>
+
+  <div class="section" id="ach" style="display:none">
+    <div class="panel">
+      <h2>Logros</h2>
+      <div id="achList" class="list"></div>
     </div>
   </div>
 </div>
 
-<!-- SHOP -->
-<div id="shop" class="modal">
-  <div class="sheet">
-    <h2>Tienda</h2>
-    <button onclick="buyP()">+1 tap (50)</button><br><br>
-    <button onclick="buyA()">Auto +1/s (250)</button><br><br>
-    <button onclick="closeM()">Cerrar</button>
-  </div>
-</div>
-
-<!-- ACH -->
-<div id="ach" class="modal">
-  <div class="sheet">
-    <h2>Logros</h2>
-    <div id="achList"></div>
-    <button onclick="closeM()">Cerrar</button>
-  </div>
-</div>
-
 <script>
-let g = JSON.parse(localStorage.getItem("rb_save")) || {
-  v:0,p:1,a:0,r:0,t:"dark",started:false
+let data = JSON.parse(localStorage.getItem("click_save")) || {
+  v:0,p:1,a:0,started:false
 };
 
-const achievements=[
-  ...Array.from({length:45},(_,i)=>({t:`Logro ${i+1}`,c:()=>g.v>=(i+1)*50})),
-  {t:"¿Qué hiciste?",c:()=>g.v===666,h:true},
-  {t:"Sin tocar",c:()=>g.a>=5&&g.p===1,h:true},
-  {t:"Reinicio eterno",c:()=>g.r>=10,h:true},
-  {t:"No duermes",c:()=>g.v>=10000,h:true},
-  {t:"Esto no era normal",c:()=>localStorage.length>5,h:true},
+const achs = [
+  ...Array.from({length:45},(_,i)=>({
+    t:`${i+1} clicks`,
+    c:()=>data.v>=i+1
+  })),
+  {t:"¿Por qué hiciste esto?",c:()=>data.v===666,h:true},
+  {t:"No pares",c:()=>data.v>=1000,h:true},
+  {t:"Insano",c:()=>data.v>=5000,h:true},
+  {t:"Esto escala",c:()=>data.p>=10,h:true},
+  {t:"Ya basta",c:()=>data.a>=10,h:true}
 ];
 
-function startGame(){
-  g.started=true;
+function start(){
+  data.started=true;
   document.getElementById("start").style.display="none";
   save();
 }
+if(data.started)document.getElementById("start").style.display="none";
 
-if(g.started)document.getElementById("start").style.display="none";
-if(g.t==="light")document.body.classList.add("light");
-
-function save(){localStorage.setItem("rb_save",JSON.stringify(g))}
-function upd(){
-  count.textContent=Math.floor(g.v);
-  info.textContent=`+${g.p}/tap · +${g.a}/s · rebirth ${g.r}`;
-  renderAch();
-  save();
+function save(){localStorage.setItem("click_save",JSON.stringify(data))}
+function tap(){data.v+=data.p;update()}
+function buyTap(){if(data.v<50)return;data.v-=50;data.p++;update()}
+function buyAuto(){if(data.v<200)return;data.v-=200;data.a++;update()}
+function reset(){
+  if(!confirm("¿Seguro?"))return;
+  localStorage.removeItem("click_save");
+  location.reload();
 }
-function tap(){
-  g.v+=g.p;
-  if(g.v>=1000){g.v=0;g.r++;g.p++}
-  upd();
+function show(id){
+  document.getElementById("shop").style.display="none";
+  document.getElementById("ach").style.display="none";
+  document.getElementById(id).style.display="block";
 }
-function buyP(){if(g.v<50)return;g.v-=50;g.p++;upd()}
-function buyA(){if(g.v<250)return;g.v-=250;g.a++;upd()}
-
-function renderAch(){
+function update(){
+  count.textContent=data.v;
   achList.innerHTML="";
-  achievements.forEach(a=>{
+  achs.forEach(a=>{
     let d=document.createElement("div");
     let ok=a.c();
-    d.className="ach"+(ok?" ok":"")+(a.h?" hidden":"");
+    d.className="item"+(ok?" ok":"")+(a.h?" hidden":"");
     d.textContent=a.h&&!ok?"Logro oculto":a.t;
     achList.appendChild(d);
   });
-}
-
-function openM(id){document.getElementById(id).classList.add("active")}
-function closeM(){document.querySelectorAll(".modal").forEach(m=>m.classList.remove("active"))}
-function theme(){
-  document.body.classList.toggle("light");
-  g.t=document.body.classList.contains("light")?"light":"dark";
   save();
 }
-
-setInterval(()=>{g.v+=g.a;upd()},1000);
-upd();
+setInterval(()=>{data.v+=data.a;update()},1000);
+update();
 </script>
 
 </body>
 </html>
 
-
-</body>
-</html>
 
