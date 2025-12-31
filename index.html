@@ -3,193 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>click infinito</title>
+<title>Click Game</title>
 
 <style>
 :root{
-  --bg:#05070d;
-  --panel:#0c1022;
-  --red:#ff2e2e;
-  --text:#e8ebff;
-  --muted:#8a8fae;
-  --glow:0 0 25px rgba(255,46,46,.6);
+  --bg:#f5f7ff;
+  --card:#ffffff;
+  --primary:#6c7cff;
+  --secondary:#ff7ac6;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --shadow:0 20px 40px rgba(0,0,0,.12);
 }
 
 *{
   box-sizing:border-box;
-  font-family: system-ui, "Segoe UI", sans-serif;
+  font-family: "Segoe UI", system-ui, sans-serif;
 }
 
 body{
   margin:0;
-  height:100vh;
+  min-height:100vh;
   background:
-    radial-gradient(circle at 20% 20%, #1a1f45 0%, transparent 40%),
-    radial-gradient(circle at 80% 80%, #3a0d1d 0%, transparent 40%),
+    radial-gradient(circle at top left, #e0e7ff, transparent 40%),
+    radial-gradient(circle at bottom right, #ffe4f2, transparent 40%),
     var(--bg);
-  color:var(--text);
   display:flex;
-  justify-content:center;
   align-items:center;
-  overflow:hidden;
+  justify-content:center;
 }
 
-.noise{
-  position:fixed;
-  inset:0;
-  background:url("https://grainy-gradients.vercel.app/noise.svg");
-  opacity:.04;
-  pointer-events:none;
-}
-
-.container{
-  width:420px;
-  background:linear-gradient(180deg,#0e1330,var(--panel));
+.app{
+  width:360px;
+  background:var(--card);
   border-radius:28px;
-  padding:40px;
-  box-shadow:0 40px 120px rgba(0,0,0,.8);
-  position:relative;
-  animation:fadeUp 1s ease forwards;
-}
-
-@keyframes fadeUp{
-  from{opacity:0; transform:translateY(30px)}
-  to{opacity:1; transform:translateY(0)}
-}
-
-.header{
+  padding:30px;
+  box-shadow:var(--shadow);
   text-align:center;
-  margin-bottom:30px;
+  animation:pop .6s ease;
 }
 
-.title{
-  font-size:2.4rem;
-  letter-spacing:6px;
-  font-weight:300;
-  position:relative;
-  animation:glitch 6s infinite;
+@keyframes pop{
+  from{transform:scale(.9);opacity:0}
+  to{transform:scale(1);opacity:1}
 }
 
-@keyframes glitch{
-  0%,95%,100%{text-shadow:none}
-  96%{text-shadow:2px 0 red,-2px 0 cyan}
-  97%{text-shadow:-2px 0 red,2px 0 cyan}
-  98%{text-shadow:2px 2px red,-2px -2px cyan}
+h1{
+  margin:0;
+  font-size:2rem;
+  color:var(--text);
 }
 
-.subtitle{
-  margin-top:10px;
-  font-size:.8rem;
+p{
   color:var(--muted);
-  letter-spacing:3px;
-}
-
-.panel{
-  margin-top:30px;
-  background:rgba(255,255,255,.03);
-  border-radius:18px;
-  padding:20px;
-}
-
-.stat{
-  display:flex;
-  justify-content:space-between;
   font-size:.9rem;
-  margin-bottom:10px;
 }
 
-.big-btn{
+.score{
+  font-size:3rem;
+  font-weight:700;
+  margin:20px 0;
+  color:var(--primary);
+}
+
+.main-btn{
   width:100%;
-  margin-top:20px;
-  padding:26px;
+  padding:22px;
+  font-size:1.4rem;
   border:none;
-  border-radius:22px;
-  font-size:1.8rem;
-  background:linear-gradient(135deg,#ff2e2e,#ff0066);
+  border-radius:20px;
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
   color:white;
   cursor:pointer;
-  box-shadow:var(--glow);
+  box-shadow:0 10px 30px rgba(108,124,255,.4);
   transition:transform .1s, box-shadow .2s;
 }
 
-.big-btn:active{
-  transform:scale(.94);
-  box-shadow:0 0 50px rgba(255,46,46,.9);
+.main-btn:active{
+  transform:scale(.95);
+  box-shadow:0 5px 15px rgba(108,124,255,.6);
 }
 
-.message{
-  margin-top:30px;
-  text-align:center;
-  font-size:1.2rem;
+.stats{
+  margin-top:25px;
+  display:flex;
+  justify-content:space-between;
+  font-size:.8rem;
+  color:var(--muted);
+}
+
+.achievement{
+  margin-top:18px;
+  font-size:.85rem;
+  color:var(--secondary);
   opacity:0;
-  transform:translateY(10px);
   transition:.4s ease;
 }
 
-.message.show{
+.achievement.show{
   opacity:1;
-  transform:translateY(0);
-}
-
-.footer{
-  margin-top:40px;
-  text-align:center;
-  font-size:.65rem;
-  opacity:.4;
-  letter-spacing:2px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="noise"></div>
+<div class="app">
+  <h1>Click Game</h1>
+  <p>Haz click y suma puntos</p>
 
-<div class="container">
-  <div class="header">
-    <div class="title">INTERFACE</div>
-    <div class="subtitle">SYSTEM ONLINE</div>
+  <div class="score" id="score">0</div>
+
+  <button class="main-btn" id="btn">CLICK</button>
+
+  <div class="achievement" id="ach">
+    🎉 ¡Nuevo logro desbloqueado!
   </div>
 
-  <div class="panel">
-    <div class="stat">
-      <span>Estado</span>
-      <span>Activo</span>
-    </div>
-    <div class="stat">
-      <span>Interacciones</span>
-      <span id="count">0</span>
-    </div>
-
-    <button class="big-btn" id="btn">ACTIVAR</button>
-  </div>
-
-  <div class="message" id="msg">
-    Sistema respondiendo…
-  </div>
-
-  <div class="footer">
-    © INTERFACE_01
+  <div class="stats">
+    <span>Clicks</span>
+    <span id="clicks">0</span>
   </div>
 </div>
 
 <script>
-let count = 0;
+let score = 0;
+let clicks = 0;
 const btn = document.getElementById("btn");
-const msg = document.getElementById("msg");
-const counter = document.getElementById("count");
+const scoreEl = document.getElementById("score");
+const clicksEl = document.getElementById("clicks");
+const ach = document.getElementById("ach");
 
 btn.onclick = () => {
-  count++;
-  counter.textContent = count;
-  msg.classList.add("show");
-  msg.textContent = count % 5 === 0
-    ? "Respuesta inestable detectada"
-    : "Sistema respondiendo…";
+  clicks++;
+  score += 1;
+  scoreEl.textContent = score;
+  clicksEl.textContent = clicks;
 
-  setTimeout(()=>msg.classList.remove("show"),2000);
+  if(clicks === 10 || clicks === 25 || clicks === 50){
+    ach.classList.add("show");
+    setTimeout(()=>ach.classList.remove("show"),2000);
+  }
 };
 </script>
 
 </body>
 </html>
+
