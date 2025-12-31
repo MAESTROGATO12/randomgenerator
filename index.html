@@ -3,28 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Casual Clicker</title>
+<title>Pulse</title>
 
 <style>
 :root{
-  --bg1:#0f1020;
-  --bg2:#1b1d3a;
-  --card:#16182f;
+  --bg:#0b0d1a;
+  --panel:#12152b;
   --accent:#ff4d6d;
-  --accent2:#fbbf24;
-  --text:#f8fafc;
+  --accent2:#22d3ee;
+  --text:#f9fafb;
   --muted:#9ca3af;
 }
 
-*{
-  box-sizing:border-box;
-  font-family:Inter,system-ui,Segoe UI,sans-serif;
-}
+*{box-sizing:border-box;font-family:Inter,system-ui,sans-serif}
 
 body{
   margin:0;
   min-height:100vh;
-  background:radial-gradient(circle at top,var(--bg2),var(--bg1));
+  background:radial-gradient(circle at top,#1c1f4a,var(--bg));
   color:var(--text);
   display:flex;
   justify-content:center;
@@ -33,7 +29,7 @@ body{
 
 .app{
   width:100%;
-  max-width:1100px;
+  max-width:1000px;
   padding:30px;
   display:grid;
   grid-template-columns: 1fr 360px;
@@ -41,71 +37,48 @@ body{
 }
 
 .panel{
-  background:var(--card);
+  background:var(--panel);
   border-radius:28px;
   padding:30px;
-  box-shadow:0 40px 80px rgba(0,0,0,.4);
+  box-shadow:0 40px 80px rgba(0,0,0,.45);
 }
 
 .title{
+  letter-spacing:3px;
+  font-size:.75rem;
+  color:var(--muted);
+}
+
+/* MAIN NUMBER */
+.main-value{
+  font-size:5rem;
+  font-weight:900;
+  margin:30px 0;
+}
+
+.pulse-btn{
+  width:100%;
+  padding:26px;
+  border-radius:20px;
+  border:none;
   font-size:1.4rem;
   font-weight:800;
-  letter-spacing:1px;
-}
-
-/* -------- MAIN GAME -------- */
-
-.score{
-  font-size:4.2rem;
-  font-weight:900;
-  margin:30px 0 10px;
-}
-
-.subtitle{
-  color:var(--muted);
-  font-size:.8rem;
-  letter-spacing:3px;
-}
-
-.big-button{
-  width:100%;
-  margin-top:30px;
-  padding:28px;
-  border-radius:22px;
-  border:none;
-  font-size:1.5rem;
-  font-weight:900;
   background:linear-gradient(135deg,var(--accent),#ff758f);
   color:white;
   cursor:pointer;
 }
 
-.big-button:active{
-  transform:scale(.96);
-}
+.pulse-btn:active{transform:scale(.96)}
 
-.stats{
-  display:flex;
-  justify-content:space-between;
-  margin-top:20px;
-  font-size:.9rem;
+.hint{
+  margin-top:14px;
+  font-size:.8rem;
   color:var(--muted);
 }
 
-.rebirth{
-  margin-top:20px;
-  padding:14px;
-  border-radius:14px;
-  background:none;
-  border:1px solid var(--accent);
-  color:var(--accent);
-  cursor:pointer;
-}
-
-/* -------- SHOP -------- */
-
+/* SHOP */
 .shop-item{
-  background:#0f1128;
+  background:#0c0f24;
   padding:16px;
   border-radius:16px;
   margin-bottom:14px;
@@ -119,23 +92,21 @@ body{
   border:none;
   border-radius:10px;
   background:var(--accent2);
-  color:black;
   font-weight:700;
   cursor:pointer;
 }
 
-/* -------- ACHIEVEMENTS -------- */
-
+/* ACHIEVEMENTS */
 .achievements{
-  grid-column:1 / -1;
+  grid-column:1/-1;
 }
 
 .achievement{
-  background:#0f1128;
+  background:#0c0f24;
   padding:14px;
   border-radius:14px;
   margin-bottom:10px;
-  opacity:.3;
+  opacity:.25;
 }
 
 .achievement.unlocked{
@@ -151,38 +122,32 @@ body{
 
   <!-- GAME -->
   <div class="panel">
-    <div class="title">CASUAL CLICKER</div>
+    <div class="title">PULSE</div>
 
-    <div class="score" id="score">0</div>
-    <div class="subtitle">ENERGÍA</div>
+    <div class="main-value" id="value">0</div>
 
-    <button class="big-button" onclick="clickMain()">CLICK</button>
+    <button class="pulse-btn" onclick="pulse()">PULSE</button>
 
-    <div class="stats">
-      <span>Clicks: <b id="clicks">0</b></span>
-      <span>Rebirths: <b id="rebirths">0</b></span>
-    </div>
-
-    <button class="rebirth" onclick="rebirth()">REBIRTH (100 clicks)</button>
+    <div class="hint" id="hint">Algo cambiará cuando el número crezca…</div>
   </div>
 
   <!-- SHOP -->
   <div class="panel">
-    <div class="title">TIENDA</div>
+    <div class="title">MEJORAS</div>
 
     <div class="shop-item">
-      <span>+1 por click</span>
-      <button onclick="buyUpgrade(1)">50</button>
+      <span>+1 por pulse</span>
+      <button onclick="buy(1,50)">50</button>
     </div>
 
     <div class="shop-item">
-      <span>+5 por click</span>
-      <button onclick="buyUpgrade(5)">200</button>
+      <span>+5 por pulse</span>
+      <button onclick="buy(5,250)">250</button>
     </div>
 
     <div class="shop-item">
-      <span>Auto click</span>
-      <button onclick="buyAuto()">500</button>
+      <span>Auto pulse</span>
+      <button onclick="autoBuy()">500</button>
     </div>
   </div>
 
@@ -190,82 +155,79 @@ body{
   <div class="panel achievements">
     <div class="title">LOGROS</div>
 
-    <div id="a1" class="achievement">Primer Click</div>
-    <div id="a2" class="achievement">100 Clicks</div>
-    <div id="a3" class="achievement">Primer Rebirth</div>
-    <div id="a4" class="achievement">Comprador</div>
+    <div id="a1" class="achievement">Primer pulso</div>
+    <div id="a2" class="achievement">100 energía</div>
+    <div id="a3" class="achievement">El primer reinicio</div>
+    <div id="a4" class="achievement">Más poder</div>
     <div id="a5" class="achievement">???</div>
   </div>
 
 </div>
 
 <script>
-let game = JSON.parse(localStorage.getItem("casual_clicker")) || {
-  score:0,
-  clicks:0,
-  rebirths:0,
+let data = JSON.parse(localStorage.getItem("pulse_game")) || {
+  value:0,
   power:1,
-  auto:false,
-  achievements:{}
+  rebirths:0,
+  auto:false
 };
 
 function save(){
-  localStorage.setItem("casual_clicker",JSON.stringify(game));
+  localStorage.setItem("pulse_game",JSON.stringify(data));
 }
 
 function update(){
-  score.textContent = game.score;
-  clicks.textContent = game.clicks;
-  rebirths.textContent = game.rebirths;
+  value.textContent = data.value;
 
-  unlock("a1", game.clicks >= 1);
-  unlock("a2", game.clicks >= 100);
-  unlock("a3", game.rebirths >= 1);
-  unlock("a4", game.power > 1);
-  unlock("a5", game.rebirths >= 5);
+  unlock("a1",data.value>=1);
+  unlock("a2",data.value>=100);
+  unlock("a3",data.rebirths>=1);
+  unlock("a4",data.power>1);
+  unlock("a5",data.rebirths>=5);
+
+  hint.textContent =
+    data.rebirths>0
+    ? "La energía se siente diferente…"
+    : "Algo cambiará cuando el número crezca…";
 }
 
 function unlock(id,cond){
-  if(cond){
-    document.getElementById(id).classList.add("unlocked");
+  if(cond) document.getElementById(id).classList.add("unlocked");
+}
+
+function pulse(){
+  data.value += data.power;
+  checkRebirth();
+  save();
+  update();
+}
+
+function checkRebirth(){
+  if(data.value >= 1000){
+    data.value = 0;
+    data.rebirths++;
+    data.power = 1 + data.rebirths;
   }
 }
 
-function clickMain(){
-  game.clicks++;
-  game.score += game.power;
+function buy(p,cost){
+  if(data.value < cost) return;
+  data.value -= cost;
+  data.power += p;
   save();
   update();
 }
 
-function rebirth(){
-  if(game.clicks < 100) return alert("Necesitas 100 clicks");
-  game.clicks = 0;
-  game.score = 0;
-  game.rebirths++;
-  game.power = 1 + game.rebirths;
-  save();
-  update();
-}
-
-function buyUpgrade(p){
-  if(game.score < (p===1?50:200)) return;
-  game.score -= (p===1?50:200);
-  game.power += p;
-  save();
-  update();
-}
-
-function buyAuto(){
-  if(game.score < 500 || game.auto) return;
-  game.score -= 500;
-  game.auto = true;
-  setInterval(()=>clickMain(),1000);
+function autoBuy(){
+  if(data.value < 500 || data.auto) return;
+  data.value -= 500;
+  data.auto = true;
+  setInterval(pulse,1000);
   save();
 }
 
-if(game.auto){
-  setInterval(()=>clickMain(),1000);
+if(data.auto){
+  setInterval(pulse,1000);
 }
 
 update();
@@ -273,4 +235,3 @@ update();
 
 </body>
 </html>
-
