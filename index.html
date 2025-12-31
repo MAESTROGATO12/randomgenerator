@@ -3,143 +3,192 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Click Feliz</title>
+<title>Click Infinito</title>
 
 <style>
 :root {
-  --bg1: #1e3c72;
-  --bg2: #2a5298;
-  --accent: #ffffff;
+  --bg: #0f1220;
+  --panel: #1c2040;
+  --accent: #ff4d4d;
   --text: #ffffff;
 }
 
 * {
   box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
 }
 
 body {
   margin: 0;
   height: 100vh;
-  background: linear-gradient(120deg, var(--bg1), var(--bg2));
+  background: radial-gradient(circle at top, #1b1f4a, var(--bg));
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: "Segoe UI", Arial, sans-serif;
-  transition: background 0.8s ease;
-  overflow: hidden;
+  color: var(--text);
+}
+
+.game {
+  background: var(--panel);
+  border-radius: 20px;
+  padding: 40px;
+  width: 360px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+  text-align: center;
 }
 
 h1 {
-  color: var(--text);
+  margin-top: 0;
   font-weight: 300;
-  margin-bottom: 40px;
   letter-spacing: 2px;
-  opacity: 0.85;
 }
 
-button {
-  padding: 45px 90px;
-  font-size: 2.6rem;
+.score {
+  font-size: 2.2rem;
+  margin: 20px 0;
+}
+
+button.main {
+  width: 100%;
+  padding: 30px;
+  font-size: 2rem;
   border: none;
-  border-radius: 25px;
-  cursor: pointer;
+  border-radius: 18px;
   background: var(--accent);
-  color: #222;
-  box-shadow: 0 25px 50px rgba(0,0,0,0.35);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  transition: transform 0.1s ease;
 }
 
-button:hover {
-  transform: scale(1.06);
-  box-shadow: 0 35px 70px rgba(0,0,0,0.45);
+button.main:active {
+  transform: scale(0.94);
 }
 
-button:active {
-  transform: scale(0.95);
-}
-
-.counter {
+.shop {
   margin-top: 30px;
-  color: var(--text);
-  opacity: 0.7;
-  font-size: 1.1rem;
+  text-align: left;
 }
 
-.particle {
-  position: absolute;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  pointer-events: none;
-  animation: float 1.5s ease-out forwards;
+.shop h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  opacity: 0.8;
 }
 
-@keyframes float {
-  from {
-    transform: translateY(0) scale(1);
-    opacity: 1;
-  }
-  to {
-    transform: translateY(-120px) scale(0);
-    opacity: 0;
-  }
+.upgrade {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255,255,255,0.05);
+  padding: 12px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+
+.upgrade button {
+  border: none;
+  border-radius: 10px;
+  padding: 8px 12px;
+  cursor: pointer;
+  background: #2ecc71;
+  color: black;
+  font-weight: bold;
+}
+
+.upgrade button:disabled {
+  background: #555;
+  color: #999;
+  cursor: not-allowed;
 }
 
 .footer {
-  position: fixed;
-  bottom: 15px;
-  font-size: 0.9rem;
-  color: white;
+  margin-top: 15px;
+  font-size: 0.8rem;
   opacity: 0.4;
+  text-align: center;
 }
 </style>
 </head>
 
 <body>
 
-<h1>haz click y relájate</h1>
+<div class="game">
+  <h1>CLICK INFINITO</h1>
 
-<button id="btn">CLICK 😌</button>
+  <div class="score" id="score">0 clicks</div>
 
-<div class="counter" id="counter">Clicks: 0</div>
-<div class="footer">una página inútil pero bonita</div>
+  <button class="main" id="clickBtn">CLICK</button>
+
+  <div class="shop">
+    <h2>Mejoras</h2>
+
+    <div class="upgrade">
+      <span>+1 por click</span>
+      <button id="upgradeClick">10</button>
+    </div>
+
+    <div class="upgrade">
+      <span>Auto-clicker</span>
+      <button id="upgradeAuto">50</button>
+    </div>
+  </div>
+
+  <div class="footer">un juego inútil pero adictivo</div>
+</div>
 
 <script>
 let clicks = 0;
+let perClick = 1;
+let autoClickers = 0;
 
-const btn = document.getElementById("btn");
-const counter = document.getElementById("counter");
+let costClick = 10;
+let costAuto = 50;
 
-btn.addEventListener("click", (e) => {
-  clicks++;
-  counter.textContent = "Clicks: " + clicks;
+const scoreEl = document.getElementById("score");
+const clickBtn = document.getElementById("clickBtn");
+const upgradeClickBtn = document.getElementById("upgradeClick");
+const upgradeAutoBtn = document.getElementById("upgradeAuto");
 
-  // Cambiar fondo
-  document.body.style.background =
-    `linear-gradient(120deg,
-      hsl(${Math.random()*360}, 60%, 45%),
-      hsl(${Math.random()*360}, 60%, 30%))`;
+function updateUI() {
+  scoreEl.textContent = clicks + " clicks";
+  upgradeClickBtn.textContent = costClick;
+  upgradeAutoBtn.textContent = costAuto;
 
-  // Texto dinámico
-  const texts = ["CLICK ✨", "OTRA VEZ 😌", "SIGUE 🫶", "MÁS ✨", "OK 😎"];
-  btn.textContent = texts[Math.floor(Math.random() * texts.length)];
+  upgradeClickBtn.disabled = clicks < costClick;
+  upgradeAutoBtn.disabled = clicks < costAuto;
+}
 
-  // Partículas
-  for (let i = 0; i < 8; i++) {
-    const p = document.createElement("div");
-    p.className = "particle";
-    p.style.left = e.clientX + (Math.random()*40 - 20) + "px";
-    p.style.top = e.clientY + (Math.random()*40 - 20) + "px";
-    p.style.background = `hsl(${Math.random()*360}, 80%, 60%)`;
-    document.body.appendChild(p);
+clickBtn.onclick = () => {
+  clicks += perClick;
+  updateUI();
+};
 
-    setTimeout(() => p.remove(), 1500);
+upgradeClickBtn.onclick = () => {
+  if (clicks >= costClick) {
+    clicks -= costClick;
+    perClick++;
+    costClick = Math.floor(costClick * 1.8);
+    updateUI();
   }
-});
+};
+
+upgradeAutoBtn.onclick = () => {
+  if (clicks >= costAuto) {
+    clicks -= costAuto;
+    autoClickers++;
+    costAuto = Math.floor(costAuto * 2);
+    updateUI();
+  }
+};
+
+setInterval(() => {
+  clicks += autoClickers;
+  updateUI();
+}, 1000);
+
+updateUI();
 </script>
 
 </body>
 </html>
-
-
