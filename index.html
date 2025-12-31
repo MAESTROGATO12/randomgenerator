@@ -3,164 +3,114 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>???</title>
+<title>No Hagas Click</title>
 
 <style>
-:root {
-  --bg: #0f172a;
-  --panel: #020617;
-  --accent: #22c55e;
-  --danger: #ef4444;
-  --text: #e5e7eb;
-}
-
 * {
   box-sizing: border-box;
-  font-family: system-ui, sans-serif;
+  font-family: monospace;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: radial-gradient(circle at top, #1e293b, #020617);
+  background: #0a0a0a;
+  color: #e5e5e5;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: var(--text);
+  transition: all 0.3s;
+  overflow: hidden;
 }
 
-.game {
-  width: 360px;
-  padding: 24px;
-  background: rgba(2,6,23,0.85);
-  border-radius: 18px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.6);
+.container {
   text-align: center;
 }
 
 h1 {
-  margin: 0 0 10px;
-  font-size: 1.8rem;
+  font-size: 3rem;
+  margin-bottom: 20px;
 }
 
-.info {
-  display: flex;
-  justify-content: space-between;
-  margin: 14px 0 20px;
-  font-size: 0.9rem;
-  opacity: 0.9;
-}
-
-.play-area {
-  position: relative;
-  height: 220px;
-  background: #020617;
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-#target {
-  position: absolute;
-  padding: 14px 18px;
-  background: var(--accent);
-  color: #022c22;
-  font-weight: 700;
-  border-radius: 12px;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.08s;
-}
-
-#target:active {
-  transform: scale(0.9);
-}
-
-button {
-  margin-top: 20px;
-  padding: 14px;
-  width: 100%;
-  background: var(--danger);
+#btn {
+  padding: 20px 40px;
+  font-size: 1.4rem;
+  background: #111;
   color: white;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
+  border: 2px solid white;
   cursor: pointer;
 }
 
-button:hover {
-  filter: brightness(1.1);
+.shake {
+  animation: shake 0.1s infinite;
 }
 
-.hidden {
-  display: none;
+@keyframes shake {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(5px,0); }
+  50% { transform: translate(0,5px); }
+  75% { transform: translate(-5px,0); }
+  100% { transform: translate(0,0); }
+}
+
+.glitch {
+  text-shadow: 
+    2px 0 red,
+   -2px 0 cyan;
+}
+
+.popup {
+  position: absolute;
+  font-size: 1.2rem;
+  opacity: 0.9;
 }
 </style>
 </head>
 
 <body>
 
-<div class="game">
-  <h1>🎯 Reflejos</h1>
-
-  <div class="info">
-    <div>Puntos: <span id="score">0</span></div>
-    <div>Tiempo: <span id="time">15</span>s</div>
-  </div>
-
-  <div class="play-area" id="area">
-    <div id="target" class="hidden">CLICK</div>
-  </div>
-
-  <button id="start">Empezar</button>
+<div class="container">
+  <h1 id="title">NO HAGAS CLICK</h1>
+  <button id="btn">click...</button>
 </div>
 
 <script>
-const target = document.getElementById("target");
-const area = document.getElementById("area");
-const startBtn = document.getElementById("start");
-const scoreEl = document.getElementById("score");
-const timeEl = document.getElementById("time");
+let clicks = 0;
+const btn = document.getElementById("btn");
+const title = document.getElementById("title");
 
-let score = 0;
-let time = 15;
-let timer = null;
+btn.addEventListener("click", () => {
+  clicks++;
 
-function randomPosition() {
-  const maxX = area.clientWidth - target.offsetWidth;
-  const maxY = area.clientHeight - target.offsetHeight;
+  document.body.style.background =
+    `hsl(${Math.random()*360}, 60%, 10%)`;
 
-  target.style.left = Math.random() * maxX + "px";
-  target.style.top = Math.random() * maxY + "px";
-}
+  title.classList.toggle("glitch");
 
-target.addEventListener("click", () => {
-  score++;
-  scoreEl.textContent = score;
-  randomPosition();
-});
+  if (clicks > 5) {
+    document.body.classList.add("shake");
+  }
 
-startBtn.addEventListener("click", () => {
-  score = 0;
-  time = 15;
-  scoreEl.textContent = score;
-  timeEl.textContent = time;
+  if (clicks > 10) {
+    btn.textContent = "para";
+  }
 
-  startBtn.disabled = true;
-  target.classList.remove("hidden");
-  randomPosition();
+  if (clicks > 15) {
+    btn.textContent = "ya es tarde";
+  }
 
-  timer = setInterval(() => {
-    time--;
-    timeEl.textContent = time;
+  if (clicks > 20) {
+    const msg = document.createElement("div");
+    msg.className = "popup";
+    msg.textContent = "¿por qué sigues?";
+    msg.style.left = Math.random()*100 + "vw";
+    msg.style.top = Math.random()*100 + "vh";
+    document.body.appendChild(msg);
+  }
 
-    if (time <= 0) {
-      clearInterval(timer);
-      target.classList.add("hidden");
-      startBtn.disabled = false;
-      alert("⏱ Tiempo terminado\nPuntuación: " + score);
-    }
-  }, 1000);
+  if (clicks > 30) {
+    title.textContent = "TODO ESTÁ ROTO";
+  }
 });
 </script>
 
